@@ -45,10 +45,10 @@ var FableLog = function()
 			{
 				// Generate a per-instantiation UUID, using flake-idgen and biguint-format
 				var libFlakeIDGen = require('flake-idgen');
-				var FlakeIDGen = new libFlakeIDGen({ datacenter:_Parameters.parameters.UUID.DataCenter, worker:_Parameters.parameters.UUID.Worker });
+				var flakeIDGen = new libFlakeIDGen({ datacenter:_Parameters.parameters.UUID.DataCenter, worker:_Parameters.parameters.UUID.Worker });
 				var libIntFormat = require('biguint-format');
 
-				_UUID = libIntFormat(FlakeIDGen.next(), 'hex', { prefix: '0x' });
+				_UUID = libIntFormat(flakeIDGen.next(), 'hex', { prefix: '0x' });
 			}	
 		};
 
