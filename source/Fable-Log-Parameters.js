@@ -4,19 +4,15 @@
 * @class FableLogParameters
 * @constructor
 */
-// We use Underscore.js for utility
+// Underscore.js for utility
 var libUnderscore = require('underscore');
-
-// NConf for settings
-var libConfig = require('nconf');
 
 var FableLogParameters = function()
 {
 	function createNew(pFromParameters)
 	{
-		libConfig.clear();
-
 		var _PassedParameters = (typeof(pFromParameters) === 'undefined') ? {} : pFromParameters;
+		var _FileParameters = {};
 
 		var _Parameters = false;
 		var _Log = false;
@@ -29,11 +25,23 @@ var FableLogParameters = function()
 		* @method loadConfiguration
 		* @param {Object} pConfigurationFile A file to load as the configuration
 		*/
-		var loadConfiguration = function(pConfigurationFile, pConfigurationContext)
+		var loadConfiguration = function(pConfigurationFile)
 		{
-			var tmpConfigurationFile = (typeof(pConfigurationFile) === 'undefined') ? './Fable-Log-Config.json' : __dirname+'/'+pConfigurationFile;
-			var tmpConfigurationContext = (typeof(pConfigurationContext) === 'undefined') ? 'LoadedFile' : pConfigurationContext;
-			libConfig.file(tmpConfigurationContext, tmpConfigurationFile);
+			var tmpConfigurationFile = (typeof(pConfigurationFile) === 'undefined') ? __dirname+'/Fable-Log-Config.json' : __dirname+'/'+pConfigurationFile;
+			var tmpConfigurationData = {};
+
+			// Optimistically expect the file to exist.  If it doesn't, quietly continue.
+			// Logging should not bring down the app.
+			try
+			{
+				tmpConfigurationData = require(tmpConfigurationFile);
+			}
+			catch (pException)
+			{
+				console.log('Fable Log Loader Error: Configuration File Not Found at '+tmpConfigurationFile);
+			}
+
+			_FileParameters = tmpConfigurationData;
 		}
 
 		/**
@@ -45,7 +53,7 @@ var FableLogParameters = function()
 		var initializeConfiguration = function()
 		{
 			// Set the default settings
-			var tmpDefaultSettings = (
+			var tmpDefaultParameters = (
 			{
 				Product: 'Fable',
 				ProductVersion: '00.00.000',
@@ -54,14 +62,21 @@ var FableLogParameters = function()
 					{
 						DataCenter: 0,
 						Worker: 0
-					})
+					}),
+				LogStreams:
+					[
+						{
+							level: "trace",
+							stream: process.stdout
+						}
+					]
 			});
 
 			// Now mash them together.  The order of priority:
 			//  1. Anything passed in as a constructor parameter which will OVERRIDE
 			//  2. Anything part of the Config file which will OVERRIDE
 			//  3. Anything in the defaults structure above
-			_Parameters = libUnderscore.extend({}, tmpDefaultSettings, libConfig.get(), _PassedParameters);
+			_Parameters = libUnderscore.extend({}, tmpDefaultParameters, _FileParameters, _PassedParameters);
 		}
 
 		/**
@@ -100,7 +115,7 @@ var FableLogParameters = function()
 		return tmpNewFableLogParametersObject;
 	}
 
-	return { new: createNew };
+	return createNew();
 }
 
 
