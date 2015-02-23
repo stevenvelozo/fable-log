@@ -7,14 +7,6 @@
 * @module Fable Logger
 */
 
-// The logger uses Bunyan to write logs
-/**
-* Logging Abstraction
-*
-*/
-var libBunyan = require('bunyan');
-
-
 /**
 * Fable Solution Log Wrapper Main Class
 *
@@ -41,7 +33,7 @@ var FableLog = function()
 				_Parameters.loadConfiguration(tmpConfigurationFileName);
 			}
 
-			// Now create the log object
+			// Now create the Bunyan log object
 			_Log = require('bunyan').createLogger(
 				{
 					name: _Parameters.parameters.Product+'-'+_Parameters.parameters.ProductVersion,
@@ -53,13 +45,12 @@ var FableLog = function()
 			{
 				// Generate a per-instantiation UUID, using flake-idgen and biguint-format
 				var libFlakeIDGen = require('flake-idgen');
-				var flakeIDGen = new libFlakeIDGen({ datacenter:_Parameters.parameters.UUID.DataCenter, worker:_Parameters.parameters.UUID.Worker });
+				var FlakeIDGen = new libFlakeIDGen({ datacenter:_Parameters.parameters.UUID.DataCenter, worker:_Parameters.parameters.UUID.Worker });
 				var libIntFormat = require('biguint-format');
 
-				_UUID = libIntFormat(flakeIDGen.next(), 'hex', { prefix: '0x' });
-			}
-			
-		}
+				_UUID = libIntFormat(FlakeIDGen.next(), 'hex', { prefix: '0x' });
+			}	
+		};
 
 
 		/**
@@ -82,7 +73,7 @@ var FableLog = function()
 
 			_Log.trace({UUID:_UUID, datum:tmpDatum}, tmpMessage);
 			return true;
-		}
+		};
 
 		/**
 		* Write a message to the DEBUG stream.
@@ -104,7 +95,7 @@ var FableLog = function()
 
 			_Log.debug({UUID:_UUID, datum:tmpDatum}, tmpMessage);
 			return true;
-		}
+		};
 
 		/**
 		* Write a message to the INFO stream.
@@ -126,7 +117,7 @@ var FableLog = function()
 
 			_Log.info({UUID:_UUID, datum:tmpDatum}, tmpMessage);
 			return true;
-		}
+		};
 
 		/**
 		* Write a message to the WARNING stream.
@@ -148,7 +139,7 @@ var FableLog = function()
 
 			_Log.warn({UUID:_UUID, datum:tmpDatum}, tmpMessage);
 			return true;
-		}
+		};
 
 		/**
 		* Write a message to the ERROR stream.
@@ -170,7 +161,7 @@ var FableLog = function()
 
 			_Log.error({UUID:_UUID, datum:tmpDatum}, tmpMessage);
 			return true;
-		}
+		};
 
 		/**
 		* Write a message to the FATAL stream.
@@ -192,7 +183,7 @@ var FableLog = function()
 
 			_Log.fatal({UUID:_UUID, datum:tmpDatum}, tmpMessage);
 			return true;
-		}
+		};
 
 
 		/**

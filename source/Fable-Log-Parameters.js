@@ -15,7 +15,6 @@ var FableLogParameters = function()
 		var _FileParameters = {};
 
 		var _Parameters = false;
-		var _Log = false;
 
 		/**
 		* Load a configuration file.
@@ -42,7 +41,7 @@ var FableLogParameters = function()
 			}
 
 			_FileParameters = tmpConfigurationData;
-		}
+		};
 
 		/**
 		* Initialize any configuration for the parameters that don't exist, copy them to the Parameters object.
@@ -77,7 +76,7 @@ var FableLogParameters = function()
 			//  2. Anything part of the Config file which will OVERRIDE
 			//  3. Anything in the defaults structure above
 			_Parameters = libUnderscore.extend({}, tmpDefaultParameters, _FileParameters, _PassedParameters);
-		}
+		};
 
 		/**
 		* Container Object for our Factory Pattern
@@ -116,7 +115,7 @@ var FableLogParameters = function()
 	}
 
 	return createNew();
-}
+};
 
 
 
