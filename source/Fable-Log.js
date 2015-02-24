@@ -37,7 +37,7 @@ var FableLog = function()
 			_Log = require('bunyan').createLogger(
 				{
 					name: _Parameters.parameters.Product+'-'+_Parameters.parameters.ProductVersion,
-					streams: _Parameters.parameters.LogStreams
+					streams: _Parameters.parseLogStreams(_Parameters.parameters.LogStreams)
 				});
 
 			// Only create a UUID if one wasn't previously set.
@@ -49,7 +49,7 @@ var FableLog = function()
 				var libIntFormat = require('biguint-format');
 
 				_UUID = libIntFormat(flakeIDGen.next(), 'hex', { prefix: '0x' });
-			}	
+			}
 		};
 
 
@@ -206,7 +206,7 @@ var FableLog = function()
 		/**
 		 * Raw Bunyan Logger
 		 *
-		 * This is exposed for complex logging calls.  Only recommended for debug and 
+		 * This is exposed for complex logging calls.  Only recommended for debug and
 		 * lower level logging.
 		 *
 		 * @property logger

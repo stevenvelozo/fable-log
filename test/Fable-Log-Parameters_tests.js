@@ -137,7 +137,7 @@ suite
 						{
 							"Product": "ForceObject",
 							"ProductVersion": "00.00.000",
-							"UUID": 
+							"UUID":
 								{
 									"DataCenter": 0,
 									"Worker": 0
@@ -157,6 +157,113 @@ suite
 						Expect(tmpFableLogParameters.parameters.Product)
 							.that.is.a('string')
 							.that.is.equal('ForceObject');
+					}
+				);
+			}
+		);
+		suite
+		(
+			'Log Stream Parser',
+			function()
+			{
+				test
+				(
+					'parse valid log stream',
+					function()
+					{
+						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', stream:'value'}]);
+						Expect(tmpNewLogStream.length)
+							.that.is.equal(1);
+					}
+				);
+				test
+				(
+					'parse valid longer log stream',
+					function()
+					{
+						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', stream:'value'},{level: 'test2', stream:'value2'}]);
+						Expect(tmpNewLogStream.length)
+							.that.is.equal(2);
+					}
+				);
+				test
+				(
+					'parse empty log stream',
+					function()
+					{
+						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([]);
+						Expect(tmpNewLogStream.length)
+							.that.is.equal(1);
+						Expect(tmpNewLogStream[0].level)
+							.that.is.equal('trace');
+					}
+				);
+				test
+				(
+					'parse no log stream',
+					function()
+					{
+						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams();
+						Expect(tmpNewLogStream.length)
+							.that.is.equal(1);
+						Expect(tmpNewLogStream[0].level)
+							.that.is.equal('trace');
+					}
+				);
+				test
+				(
+					'parse invalid log stream entry',
+					function()
+					{
+						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams(['SNARF']);
+						Expect(tmpNewLogStream.length)
+							.that.is.equal(1);
+						Expect(tmpNewLogStream[0].level)
+							.that.is.equal('trace');
+					}
+				);
+				test
+				(
+					'parse invalid log stream object',
+					function()
+					{
+						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test'},{stream:'value'}]);
+						Expect(tmpNewLogStream.length)
+							.that.is.equal(1);
+						Expect(tmpNewLogStream[0].level)
+							.that.is.equal('trace');
+					}
+				);
+				test
+				(
+					'pipe to stdout',
+					function()
+					{
+						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', stream:'process.stdout'}]);
+						Expect(tmpNewLogStream.length)
+							.that.is.equal(1);
+						Expect(tmpNewLogStream[0].level)
+							.that.is.equal('test');
+					}
+				);
+				test
+				(
+					'pipe to stderr',
+					function()
+					{
+						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'fatality', stream:'process.stderr'}]);
+						Expect(tmpNewLogStream.length)
+							.that.is.equal(1);
+						Expect(tmpNewLogStream[0].level)
+							.that.is.equal('fatality');
 					}
 				);
 			}

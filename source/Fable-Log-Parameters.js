@@ -78,6 +78,62 @@ var FableLogParameters = function()
 			_Parameters = libUnderscore.extend({}, tmpDefaultParameters, _FileParameters, _PassedParameters);
 		};
 
+
+		/**
+		* Parse log Streams so we can use Log Objects
+		*
+		* @method parseLogStreams
+		* @param {Array} pLogStreams
+		* @return {Array} The parsed log stream object
+		*/
+		var parseLogStreams = function(pLogStreams)
+		{
+			// Because we can't json-encode the process.stdout, etc. this has to translate.
+			var tmpStreams = [];
+			var tmpDefaultStream = [ { level: "trace", stream: process.stdout } ];
+
+			if (!Array.isArray(pLogStreams))
+			{
+				// No valid stream array, return default.
+				return tmpDefaultStream;
+			}
+
+			for (var i = 0; i < pLogStreams.length; i++)
+			{
+				if (typeof(pLogStreams[i]) !== 'object')
+				{
+					console.log('Invalid log stream definition: '+JSON.stringify(pLogStreams[i]));
+					continue;
+				}
+
+				if (!pLogStreams[i].hasOwnProperty('level') || !pLogStreams[i].hasOwnProperty('stream'))
+				{
+					console.log('Log stream object does not contain a .level and .stream property: '+JSON.stringify(pLogStreams[i]));
+					continue;
+				}
+				if ((typeof(pLogStreams[i].stream) === 'string') && (pLogStreams[i].stream === 'process.stdout'))
+				{
+					tmpStreams.push({ level:pLogStreams[i].level, stream:process.stdout});
+				}
+				else if ((typeof(pLogStreams[i].stream) === 'string') && (pLogStreams[i].stream === 'process.stderr'))
+				{
+					tmpStreams.push({ level:pLogStreams[i].level, stream:process.stderr});
+				}
+				else
+				{
+					tmpStreams.push({ level:pLogStreams[i].level, stream:pLogStreams[i].stream});
+				}
+			}
+
+			if (tmpStreams.length < 1)
+			{
+				tmpStreams = tmpDefaultStream;
+			}
+
+			return tmpStreams;
+		};
+
+
 		/**
 		* Container Object for our Factory Pattern
 		*/
@@ -85,6 +141,8 @@ var FableLogParameters = function()
 		{
 			initializeConfiguration:initializeConfiguration,
 			loadConfiguration:loadConfiguration,
+
+			parseLogStreams:parseLogStreams,
 
 			new:createNew
 		});

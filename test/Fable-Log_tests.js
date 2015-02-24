@@ -86,6 +86,21 @@ suite
 				);
 				test
 				(
+					'writing objects to all log streams',
+					function()
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new();
+						tmpFableLog.initialize();
+						tmpFableLog.trace('Testing object sending to Trace...',{Value:"Unlikely",Status:true});
+						tmpFableLog.debug('Testing object sending to Debug...',{Value:"Unlikely",Status:true});
+						tmpFableLog.info('Testing object sending to Info...',{Value:"Unlikely",Status:true});
+						tmpFableLog.warn('Testing object sending to Warning...',{Value:"Unlikely",Status:true});
+						tmpFableLog.error('Testing object sending to Error...',{Value:"Unlikely",Status:true});
+						tmpFableLog.fatal('Testing object sending to Fatal...',{Value:"Unlikely",Status:true});
+					}
+				);
+				test
+				(
 					'failing to write to all log streams',
 					function()
 					{
@@ -97,6 +112,21 @@ suite
 						tmpFableLog.warn('Test of Warning');
 						tmpFableLog.error('Test of Error');
 						tmpFableLog.fatal('Test of Fatal');
+					}
+				);
+				test
+				(
+					'logging empty values to all log streams',
+					function()
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new();
+						tmpFableLog.initialize();
+						tmpFableLog.trace();
+						tmpFableLog.debug();
+						tmpFableLog.info();
+						tmpFableLog.warn();
+						tmpFableLog.error();
+						tmpFableLog.fatal();
 					}
 				);
 				test
