@@ -102,31 +102,47 @@ var FableLogParameters = function()
 			{
 				if (typeof(pLogStreams[i]) !== 'object')
 				{
-					console.log('Invalid log stream definition: '+JSON.stringify(pLogStreams[i]));
+					console.log('Invalid log definition: '+JSON.stringify(pLogStreams[i]));
 					continue;
 				}
 
-				if (!pLogStreams[i].hasOwnProperty('level') || !pLogStreams[i].hasOwnProperty('stream'))
+				// Validate that the log entry has the expected values
+				// Entries look like {path:'/tmp/somelog.log',level:'info'}
+				if (!pLogStreams[i].hasOwnProperty('level'))
 				{
-					console.log('Log stream object does not contain a .level and .stream property: '+JSON.stringify(pLogStreams[i]));
+					console.log('Log definition does not contain a .level property: '+JSON.stringify(pLogStreams[i]));
 					continue;
 				}
+				if ((!pLogStreams[i].hasOwnProperty('stream')) && (!pLogStreams[i].hasOwnProperty('path')))
+				{
+					console.log('Log definition does not contain a .stream or .path property: '+JSON.stringify(pLogStreams[i]));
+					continue;
+				}
+
 				if ((typeof(pLogStreams[i].stream) === 'string') && (pLogStreams[i].stream === 'process.stdout'))
 				{
+					// Add a stdout stream appender
 					tmpStreams.push({ level:pLogStreams[i].level, stream:process.stdout});
 				}
 				else if ((typeof(pLogStreams[i].stream) === 'string') && (pLogStreams[i].stream === 'process.stderr'))
 				{
+					// Add a stderr stream appender
 					tmpStreams.push({ level:pLogStreams[i].level, stream:process.stderr});
+				}
+				else if (pLogStreams[i].hasOwnProperty('path'))
+				{
+					// Add a file-based stream appender
+					tmpStreams.push({ level:pLogStreams[i].level, path:pLogStreams[i].path});
 				}
 				else
 				{
-					tmpStreams.push({ level:pLogStreams[i].level, stream:pLogStreams[i].stream});
+					console.log('Log stream definition is invalid most likely due to an unknown stream type.  Ignoring entry # '+i);
 				}
 			}
 
 			if (tmpStreams.length < 1)
 			{
+				// Load the default stream if nothing came in.
 				tmpStreams = tmpDefaultStream;
 			}
 

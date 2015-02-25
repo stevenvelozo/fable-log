@@ -179,11 +179,22 @@ suite
 				);
 				test
 				(
-					'parse valid longer log stream',
+					'parse invalid longer log stream',
 					function()
 					{
 						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
 						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', stream:'value'},{level: 'test2', stream:'value2'}]);
+						Expect(tmpNewLogStream.length)
+							.that.is.equal(1);
+					}
+				);
+				test
+				(
+					'parse valid longer log stream',
+					function()
+					{
+						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', stream:'process.stderr'},{level: 'test2', stream:'process.stdout'}]);
 						Expect(tmpNewLogStream.length)
 							.that.is.equal(2);
 					}
@@ -233,7 +244,20 @@ suite
 					function()
 					{
 						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
-						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test'},{stream:'value'}]);
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test'},{stream:'value0'},{path:'value1'}]);
+						Expect(tmpNewLogStream.length)
+							.that.is.equal(1);
+						Expect(tmpNewLogStream[0].level)
+							.that.is.equal('trace');
+					}
+				);
+				test
+				(
+					'parse invalid log stream definition',
+					function()
+					{
+						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{stream:'value0',path:'value1'}]);
 						Expect(tmpNewLogStream.length)
 							.that.is.equal(1);
 						Expect(tmpNewLogStream[0].level)
@@ -260,6 +284,19 @@ suite
 					{
 						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
 						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'fatality', stream:'process.stderr'}]);
+						Expect(tmpNewLogStream.length)
+							.that.is.equal(1);
+						Expect(tmpNewLogStream[0].level)
+							.that.is.equal('fatality');
+					}
+				);
+				test
+				(
+					'pipe to file',
+					function()
+					{
+						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'fatality', path:'./tmp/SomeLog.log'}]);
 						Expect(tmpNewLogStream.length)
 							.that.is.equal(1);
 						Expect(tmpNewLogStream[0].level)
