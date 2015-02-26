@@ -71,7 +71,7 @@ var FableLog = function()
 			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
 			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
 
-			_Log.trace({UUID:_UUID, datum:tmpDatum}, tmpMessage);
+			_Log.trace({Source:_UUID, datum:tmpDatum}, tmpMessage);
 			return true;
 		};
 
@@ -93,7 +93,7 @@ var FableLog = function()
 			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
 			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
 
-			_Log.debug({UUID:_UUID, datum:tmpDatum}, tmpMessage);
+			_Log.debug({Source:_UUID, datum:tmpDatum}, tmpMessage);
 			return true;
 		};
 
@@ -115,7 +115,7 @@ var FableLog = function()
 			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
 			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
 
-			_Log.info({UUID:_UUID, datum:tmpDatum}, tmpMessage);
+			_Log.info({Source:_UUID, datum:tmpDatum}, tmpMessage);
 			return true;
 		};
 
@@ -137,7 +137,7 @@ var FableLog = function()
 			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
 			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
 
-			_Log.warn({UUID:_UUID, datum:tmpDatum}, tmpMessage);
+			_Log.warn({Source:_UUID, datum:tmpDatum}, tmpMessage);
 			return true;
 		};
 
@@ -159,7 +159,7 @@ var FableLog = function()
 			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
 			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
 
-			_Log.error({UUID:_UUID, datum:tmpDatum}, tmpMessage);
+			_Log.error({Source:_UUID, datum:tmpDatum}, tmpMessage);
 			return true;
 		};
 
@@ -181,7 +181,7 @@ var FableLog = function()
 			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
 			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
 
-			_Log.fatal({UUID:_UUID, datum:tmpDatum}, tmpMessage);
+			_Log.fatal({Source:_UUID, datum:tmpDatum}, tmpMessage);
 			return true;
 		};
 

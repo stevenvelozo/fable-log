@@ -31,7 +31,9 @@
   "dependencies": {
     "biguint-format": "1.0.0",
     "bunyan": "1.3.3",
+    "bunyan-mongodb-stream": "0.0.3",
     "flake-idgen": "1.0.0",
+    "mongoose": "^3.8.24",
     "underscore": "1.7.0"
   }
 }
