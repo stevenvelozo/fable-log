@@ -16,6 +16,8 @@ var FableLogParameters = function()
 
 		var _Parameters = false;
 
+		var _MongoStream = false;
+
 		/**
 		* Load a configuration file.
 		*
@@ -70,7 +72,7 @@ var FableLogParameters = function()
 							stream: process.stdout
 						}
 					],
-				MongoDBURL: 'mongodb://127.0.0.1:27017/Headlight'
+				MongoDBURL: 'mongodb://127.0.0.1:27017/Fable'
 			});
 
 			// Now mash them together.  The order of priority:
@@ -100,8 +102,6 @@ var FableLogParameters = function()
 				// No valid stream array, return default.
 				return tmpDefaultStream;
 			}
-
-//			console.log(stringifyOnce(pLogStreams))
 
 			for (var i = 0; i < pLogStreams.length; i++)
 			{
@@ -135,26 +135,10 @@ var FableLogParameters = function()
 							tmpStreams.push({ level:tmpLogLevel, stream:process.stderr});
 							break;
 						case 'mongodb':
-								var libMongoClient = require('mongodb');
-
-								var libBunyanMongo = require('bunyan-mongo');
-								var tmpBunyanMongoStream = new libBunyanMongo();
-
-								console.log("Attempting to connect to MongoDB for logging...");
-								libMongoClient.Db.connect(_Parameters.MongoDBURL, 
-									function(pError, pDatabase)
-									{
-										console.log("...Checking MongoDB connection...");
-										if (pError === null)
-											console.log("Connected correctly to MongoDB Server!");
-										else
-											console.log("Error connecting to MongoDB: "+pError);
-										tmpBunyanMongoStream.setDB(pDatabase);
-										// Add a mongodb stream appender
-										tmpStreams.push({ type:'raw', stream:tmpBunyanMongoStream});
-									}
-								);
-							break;						
+							var libBunyanMongo = require('bunyan-mongo');
+							_MongoStream = new libBunyanMongo();
+							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_MongoStream})
+							break;
 					}
 				}
 				else if (typeof(pLogStreams[i].stream) === 'object')
@@ -182,6 +166,43 @@ var FableLogParameters = function()
 			return tmpStreams;
 		};
 
+		/**
+		* Initialize Mongo Stream if it Exists
+		*
+		* @method initializeMongoStreams
+		* @param {Array} pLogStreams
+		* @return {Array} The parsed log stream object
+		*/
+		var initializeMongoStreams = function(fNext)
+		{
+			// This is here because MongoDB connection methods are async.  This conflicts with logging and unit testing.
+			var tmpNext = (typeof(fNext) !== 'function') ? function() {} : fNext;
+
+			if (!_MongoStream)
+			{
+				tmpNext();
+			}
+			else
+			{
+				var libMongoClient = require('mongodb').MongoClient;
+				console.log('Connecting to MongoDB for the Fable Log Mongo provider...');
+				libMongoClient.connect(_Parameters.MongoDBURL,
+					function(pError, pDB)
+					{
+						console.log('...testing MongoDB connection');
+						if (pError !== null)
+						{
+							console.log('   ERROR Connecting to MongoDB: '+pError);
+						}
+						else
+						{
+							_MongoStream.setDB(pDB);							
+						}
+						tmpNext();
+					}
+				);
+			}
+		};
 
 		/**
 		* Container Object for our Factory Pattern
@@ -192,6 +213,8 @@ var FableLogParameters = function()
 			loadConfiguration:loadConfiguration,
 
 			parseLogStreams:parseLogStreams,
+
+			initializeMongoStreams:initializeMongoStreams,
 
 			new:createNew
 		});
@@ -206,7 +229,7 @@ var FableLogParameters = function()
 			{
 				get: function()
 						{
-							// Lazily load the parameters
+							// Lazily initialize the parameters if they aren't there.
 							if (!_Parameters)
 							{
 								initializeConfiguration();

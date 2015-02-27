@@ -194,6 +194,7 @@ var FableLog = function()
 		var tmpNewFableLogObject = (
 		{
 			initialize: initialize,
+			initializeMongoStreams: _Parameters.initializeMongoStreams,
 
 			trace: logTrace,
 			debug: logDebug,

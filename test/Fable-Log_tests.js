@@ -206,15 +206,38 @@ suite
 				test
 				(
 					'passing in the mongoDB parameter',
-					function()
+					function(fDone)
 					{
 						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'Mongoooo', LogStreams:[{streamtype:'process.stdout'},{streamtype:'mongodb'}]});
 						tmpFableLog.initialize();
-						tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
-						tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
-						tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
-						tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
-						tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
+						// We have to do this as a series, so we can ensure the connection is done before we start logging.
+						var libAsync = require('async');
+						libAsync.series([
+							function(fNext)
+							{
+								tmpFableLog.initializeMongoStreams(fNext);
+							},
+							function(fNext)
+							{
+								tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
+								tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
+								tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
+								tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
+								tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
+								fDone();
+								fNext();
+							}
+						]);
+					}
+				);
+				test
+				(
+					'passing in a bad mongoDB parameter',
+					function(fDone)
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'Mongoooo', LogStreams:[{streamtype:'mongodb'}], MongoDBURL: 'mongodb://baddburl'});
+						tmpFableLog.initialize();
+						tmpFableLog.initializeMongoStreams(fDone);
 					}
 				);
 			}

@@ -1,6 +1,6 @@
 {
   "name": "fable-log",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "A simple logging wrapper.",
   "main": "source/Fable-Log.js",
   "scripts": {
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/stevenvelozo/fable-log",
   "devDependencies": {
+    "async": "0.9.0",
     "chai": "2.0.0",
     "codeclimate-test-reporter": "0.0.4",
     "coveralls": "2.11.2",
