@@ -43,6 +43,7 @@ var FableLogParameters = function()
 			_FileParameters = tmpConfigurationData;
 		};
 
+
 		/**
 		* Initialize any configuration for the parameters that don't exist, copy them to the Parameters object.
 		*
@@ -68,7 +69,8 @@ var FableLogParameters = function()
 							level: "trace",
 							stream: process.stdout
 						}
-					]
+					],
+				MongoDBURL: 'mongodb://127.0.0.1:27017/Headlight'
 			});
 
 			// Now mash them together.  The order of priority:
@@ -90,13 +92,16 @@ var FableLogParameters = function()
 		{
 			// Because we can't json-encode the process.stdout, etc. this has to translate.
 			var tmpStreams = [];
-			var tmpDefaultStream = [ { level: "trace", stream: process.stdout } ];
+			var tmpDefaultStream = [ { level: 'trace', stream: process.stdout } ];
+			var tmpLogLevel = 'info';
 
 			if (!Array.isArray(pLogStreams))
 			{
 				// No valid stream array, return default.
 				return tmpDefaultStream;
 			}
+
+//			console.log(stringifyOnce(pLogStreams))
 
 			for (var i = 0; i < pLogStreams.length; i++)
 			{
@@ -110,33 +115,61 @@ var FableLogParameters = function()
 				// Entries look like {path:'/tmp/somelog.log',level:'info'}
 				if (!pLogStreams[i].hasOwnProperty('level'))
 				{
-					console.log('Log definition does not contain a .level property: '+JSON.stringify(pLogStreams[i]));
-					continue;
+					console.log('Log definition does not contain a .level property; defaulting to info');
 				}
-				if ((!pLogStreams[i].hasOwnProperty('stream')) && (!pLogStreams[i].hasOwnProperty('path')))
+				else
 				{
-					console.log('Log definition does not contain a .stream or .path property: '+JSON.stringify(pLogStreams[i]));
-					continue;
+					tmpLogLevel = pLogStreams[i].level;
 				}
 
-				if ((typeof(pLogStreams[i].stream) === 'string') && (pLogStreams[i].stream === 'process.stdout'))
+				if (typeof(pLogStreams[i].streamtype) === 'string')
 				{
-					// Add a stdout stream appender
-					tmpStreams.push({ level:pLogStreams[i].level, stream:process.stdout});
+					switch(pLogStreams[i].streamtype)
+					{
+						case 'process.stdout':
+							// Add a stdout stream appender
+							tmpStreams.push({ level:tmpLogLevel, stream:process.stdout});
+							break;
+						case 'process.stderr':
+							// Add a stderr stream appender
+							tmpStreams.push({ level:tmpLogLevel, stream:process.stderr});
+							break;
+						case 'mongodb':
+								var libMongoClient = require('mongodb');
+
+								var libBunyanMongo = require('bunyan-mongo');
+								var tmpBunyanMongoStream = new libBunyanMongo();
+
+								console.log("Attempting to connect to MongoDB for logging...");
+								libMongoClient.Db.connect(_Parameters.MongoDBURL, 
+									function(pError, pDatabase)
+									{
+										console.log("...Checking MongoDB connection...");
+										if (pError === null)
+											console.log("Connected correctly to MongoDB Server!");
+										else
+											console.log("Error connecting to MongoDB: "+pError);
+										tmpBunyanMongoStream.setDB(pDatabase);
+										// Add a mongodb stream appender
+										tmpStreams.push({ type:'raw', stream:tmpBunyanMongoStream});
+									}
+								);
+							break;						
+					}
 				}
-				else if ((typeof(pLogStreams[i].stream) === 'string') && (pLogStreams[i].stream === 'process.stderr'))
+				else if (typeof(pLogStreams[i].stream) === 'object')
 				{
-					// Add a stderr stream appender
-					tmpStreams.push({ level:pLogStreams[i].level, stream:process.stderr});
+					// Add a passed-in stream provider
+					tmpStreams.push({ level:tmpLogLevel, stream:pLogStreams[i].stream});
 				}
 				else if (pLogStreams[i].hasOwnProperty('path'))
 				{
 					// Add a file-based stream appender
-					tmpStreams.push({ level:pLogStreams[i].level, path:pLogStreams[i].path});
+					tmpStreams.push({ level:tmpLogLevel, path:pLogStreams[i].path});
 				}
 				else
 				{
-					console.log('Log stream definition is invalid most likely due to an unknown stream type.  Ignoring entry # '+i);
+					console.log('Log stream definition is invalid - no parsable stream route.  Ignoring entry # '+i);
 				}
 			}
 

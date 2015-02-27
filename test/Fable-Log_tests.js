@@ -197,8 +197,23 @@ suite
 					function()
 					{
 						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'Paramset', ProductVersion:'9.8.7'});
+						// This should overwrite the parameters we set above entirely.
 						tmpFableLog.parameters = require('../source/Fable-Log-Parameters.js').new();
 						tmpFableLog.initialize();
+						tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
+					}
+				);
+				test
+				(
+					'passing in the mongoDB parameter',
+					function()
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'Mongoooo', LogStreams:[{streamtype:'process.stdout'},{streamtype:'mongodb'}]});
+						tmpFableLog.initialize();
+						tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
+						tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
+						tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
+						tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
 						tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
 					}
 				);

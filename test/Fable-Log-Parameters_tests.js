@@ -146,7 +146,7 @@ suite
 								[
 									{
 										"level": "debug",
-										"stream": "process.stdout"
+										"streamtype": "process.stdout"
 									},
 									{
 										"level": "trace",
@@ -172,7 +172,7 @@ suite
 					function()
 					{
 						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
-						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', stream:'value'}]);
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', streamtype:'value'}]);
 						Expect(tmpNewLogStream.length)
 							.that.is.equal(1);
 					}
@@ -183,7 +183,7 @@ suite
 					function()
 					{
 						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
-						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', stream:'value'},{level: 'test2', stream:'value2'}]);
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', streamtype:'value'},{level: 'test2', streamtype:'value2'}]);
 						Expect(tmpNewLogStream.length)
 							.that.is.equal(1);
 					}
@@ -194,7 +194,7 @@ suite
 					function()
 					{
 						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
-						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', stream:'process.stderr'},{level: 'test2', stream:'process.stdout'}]);
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', streamtype:'process.stderr'},{level: 'test2', streamtype:'process.stdout'}]);
 						Expect(tmpNewLogStream.length)
 							.that.is.equal(2);
 					}
@@ -244,7 +244,7 @@ suite
 					function()
 					{
 						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
-						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test'},{stream:'value0'},{path:'value1'}]);
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test'},{streamtype:'value0'}]);
 						Expect(tmpNewLogStream.length)
 							.that.is.equal(1);
 						Expect(tmpNewLogStream[0].level)
@@ -257,7 +257,7 @@ suite
 					function()
 					{
 						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
-						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{stream:'value0',path:'value1'}]);
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{streamtype:'value0'}]);
 						Expect(tmpNewLogStream.length)
 							.that.is.equal(1);
 						Expect(tmpNewLogStream[0].level)
@@ -270,7 +270,7 @@ suite
 					function()
 					{
 						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
-						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', stream:'process.stdout'}]);
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', streamtype:'process.stdout'}]);
 						Expect(tmpNewLogStream.length)
 							.that.is.equal(1);
 						Expect(tmpNewLogStream[0].level)
@@ -283,7 +283,7 @@ suite
 					function()
 					{
 						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
-						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'fatality', stream:'process.stderr'}]);
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'fatality', streamtype:'process.stderr'}]);
 						Expect(tmpNewLogStream.length)
 							.that.is.equal(1);
 						Expect(tmpNewLogStream[0].level)

@@ -33,6 +33,8 @@ var FableLog = function()
 				_Parameters.loadConfiguration(tmpConfigurationFileName);
 			}
 
+			_Parameters.initializeConfiguration();
+
 			// Now create the Bunyan log object
 			_Log = require('bunyan').createLogger(
 				{
