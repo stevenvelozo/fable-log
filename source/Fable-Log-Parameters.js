@@ -58,7 +58,7 @@ var FableLogParameters = function()
 			var tmpDefaultParameters = (
 			{
 				Product: 'Fable',
-				ProductVersion: '00.00.000',
+				ProductVersion: '0.0.0',
 				// This is the default development server setup for Logging, which is inefficient for production.
 				UUID: (
 					{

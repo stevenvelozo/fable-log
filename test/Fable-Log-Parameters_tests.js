@@ -65,7 +65,7 @@ suite
 							.that.is.equal('Fable');
 						Expect(tmpFableLogParameters.parameters.ProductVersion)
 							.that.is.a('string')
-							.that.is.equal('00.00.000');
+							.that.is.equal('0.0.0');
 					}
 				);
 				test
@@ -79,7 +79,7 @@ suite
 							.that.is.equal('Parcheesi');
 						Expect(tmpFableLogParameters.parameters.ProductVersion)
 							.that.is.a('string')
-							.that.is.equal('00.00.000');
+							.that.is.equal('0.0.0');
 					}
 				);
 				test
@@ -94,7 +94,7 @@ suite
 							.that.is.equal('LogTest');
 						Expect(tmpFableLogParameters.parameters.ProductVersion)
 							.that.is.a('string')
-							.that.is.equal('00.09.003');
+							.that.is.equal('0.9.3');
 					}
 				);
 				test
@@ -109,7 +109,7 @@ suite
 							.that.is.equal('Fable');
 						Expect(tmpFableLogParameters.parameters.ProductVersion)
 							.that.is.a('string')
-							.that.is.equal('00.00.001');
+							.that.is.equal('0.0.1');
 					}
 				);
 				test
@@ -124,7 +124,7 @@ suite
 							.that.is.equal('Fable');
 						Expect(tmpFableLogParameters.parameters.ProductVersion)
 							.that.is.a('string')
-							.that.is.equal('00.00.000');
+							.that.is.equal('0.0.0');
 					}
 				);
 				test
@@ -136,7 +136,7 @@ suite
 						tmpFableLogParameters.parameters = (
 						{
 							"Product": "ForceObject",
-							"ProductVersion": "00.00.000",
+							"ProductVersion": "1.2.3",
 							"UUID":
 								{
 									"DataCenter": 0,

@@ -38,7 +38,7 @@ var FableLog = function()
 			// Now create the Bunyan log object
 			_Log = require('bunyan').createLogger(
 				{
-					name: _Parameters.parameters.Product+'-'+_Parameters.parameters.ProductVersion,
+					name: _Parameters.parameters.Product,
 					streams: _Parameters.parseLogStreams(_Parameters.parameters.LogStreams)
 				});
 
@@ -73,7 +73,7 @@ var FableLog = function()
 			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
 			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
 
-			_Log.trace({Source:_UUID, datum:tmpDatum}, tmpMessage);
+			_Log.trace({Source:_UUID, ver:_Parameters.parameters.ProductVersion, datum:tmpDatum}, tmpMessage);
 			return true;
 		};
 
@@ -95,7 +95,7 @@ var FableLog = function()
 			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
 			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
 
-			_Log.debug({Source:_UUID, datum:tmpDatum}, tmpMessage);
+			_Log.debug({Source:_UUID, ver:_Parameters.parameters.ProductVersion, datum:tmpDatum}, tmpMessage);
 			return true;
 		};
 
@@ -117,7 +117,7 @@ var FableLog = function()
 			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
 			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
 
-			_Log.info({Source:_UUID, datum:tmpDatum}, tmpMessage);
+			_Log.info({Source:_UUID, ver:_Parameters.parameters.ProductVersion, datum:tmpDatum}, tmpMessage);
 			return true;
 		};
 
@@ -139,7 +139,7 @@ var FableLog = function()
 			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
 			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
 
-			_Log.warn({Source:_UUID, datum:tmpDatum}, tmpMessage);
+			_Log.warn({Source:_UUID, ver:_Parameters.parameters.ProductVersion, datum:tmpDatum}, tmpMessage);
 			return true;
 		};
 
@@ -161,7 +161,7 @@ var FableLog = function()
 			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
 			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
 
-			_Log.error({Source:_UUID, datum:tmpDatum}, tmpMessage);
+			_Log.error({Source:_UUID, ver:_Parameters.parameters.ProductVersion, datum:tmpDatum}, tmpMessage);
 			return true;
 		};
 
@@ -183,7 +183,7 @@ var FableLog = function()
 			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
 			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
 
-			_Log.fatal({Source:_UUID, datum:tmpDatum}, tmpMessage);
+			_Log.fatal({Source:_UUID, ver:_Parameters.parameters.ProductVersion, datum:tmpDatum}, tmpMessage);
 			return true;
 		};
 
