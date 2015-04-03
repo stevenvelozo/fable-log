@@ -179,8 +179,6 @@ var FableLogParameters = function()
 			// This is here because MongoDB connection methods are async.  This conflicts with logging and unit testing.
 			var tmpNext = (typeof(fNext) !== 'function') ? function() {} : fNext;
 
-			console.log('***@#$@*#($*@($*@($#@* State: '+_MongoStreamInitialized)
-
 			if (!_MongoStream)
 			{
 				tmpNext();

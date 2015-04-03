@@ -11,3 +11,4 @@
 #### 2015-04-03: Steven Velozo
 * Documentation and examples
 * Added automagic Mongo init (previously you had to explicitly init Mongodbs)
+* Changed UUID to use fable-uuid

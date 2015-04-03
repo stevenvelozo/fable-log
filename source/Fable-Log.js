@@ -20,7 +20,6 @@ var FableLog = function()
 		var _Parameters = require('./Fable-Log-Parameters.js').new(pFromParameters);
 
 		var _Log = false;
-
 		var _UUID = false;
 
 		var initialize = function(pConfigurationFileName)
@@ -45,12 +44,7 @@ var FableLog = function()
 			// Only create a UUID if one wasn't previously set.
 			if (!_UUID)
 			{
-				// Generate a per-instantiation UUID, using flake-idgen and biguint-format
-				var libFlakeIDGen = require('flake-idgen');
-				var flakeIDGen = new libFlakeIDGen({ datacenter:_Parameters.parameters.UUID.DataCenter, worker:_Parameters.parameters.UUID.Worker });
-				var libIntFormat = require('biguint-format');
-
-				_UUID = libIntFormat(flakeIDGen.next(), 'hex', { prefix: '0x' });
+				_UUID = require('fable-uuid').new(_Parameters.parameters).getUUID();
 			}
 
 			// Automagically initialize the Mongo streams if they haven't been

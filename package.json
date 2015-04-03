@@ -1,6 +1,6 @@
 {
   "name": "fable-log",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A simple logging wrapper.",
   "main": "source/Fable-Log.js",
   "scripts": {
@@ -30,10 +30,9 @@
     "mocha": "2.1.0"
   },
   "dependencies": {
-    "biguint-format": "1.0.0",
     "bunyan": "1.3.3",
     "bunyan-mongo": "0.1.0",
-    "flake-idgen": "1.0.0",
+    "fable-uuid": "^0.1.3",
     "mongodb": "1.4.32",
     "underscore": "1.7.0"
   }
