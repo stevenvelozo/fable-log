@@ -17,6 +17,7 @@ var FableLogParameters = function()
 		var _Parameters = false;
 
 		var _MongoStream = false;
+		var _MongoStreamInitialized = false;
 
 		/**
 		* Load a configuration file.
@@ -178,12 +179,15 @@ var FableLogParameters = function()
 			// This is here because MongoDB connection methods are async.  This conflicts with logging and unit testing.
 			var tmpNext = (typeof(fNext) !== 'function') ? function() {} : fNext;
 
+			console.log('***@#$@*#($*@($*@($#@* State: '+_MongoStreamInitialized)
+
 			if (!_MongoStream)
 			{
 				tmpNext();
 			}
-			else
+			else if (!_MongoStreamInitialized)
 			{
+				_MongoStreamInitialized = true;
 				var libMongoClient = require('mongodb').MongoClient;
 				console.log('Connecting to MongoDB for the Fable Log Mongo provider...');
 				libMongoClient.connect(_Parameters.MongoDBURL,
@@ -201,6 +205,10 @@ var FableLogParameters = function()
 						tmpNext();
 					}
 				);
+			}
+			else
+			{
+				tmpNext();
 			}
 		};
 

@@ -52,6 +52,9 @@ var FableLog = function()
 
 				_UUID = libIntFormat(flakeIDGen.next(), 'hex', { prefix: '0x' });
 			}
+
+			// Automagically initialize the Mongo streams if they haven't been
+			_Parameters.initializeMongoStreams();
 		};
 
 
