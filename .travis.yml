@@ -3,6 +3,8 @@ services:
 language: node_js
 node_js:
   - "0.12"
+before_script:
+  - test/WaitForIt.sh
 addons:
   code_climate:
     repo_token: 2cbee4e611650d12f95f5a7a2d59d99f689c12708fe0fc4a4c8c3c9025216111
