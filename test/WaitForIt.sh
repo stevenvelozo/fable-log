@@ -10,5 +10,5 @@ ContainerStartupWait=0
 while [[ $ContainerStartupWait -lt 10 ]]; do
     echo "$ContainerStartupWait banana"
     ((++ContainerStartupWait))
-    sleep 1
+    sleep 2
 done
