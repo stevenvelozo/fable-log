@@ -179,6 +179,17 @@ suite
 				);
 				test
 				(
+					'parse valid rotating file log stream',
+					function()
+					{
+						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
+						var tmpNewLogStream = tmpFableLogParameters.parseLogStreams([{level: 'test', streamtype:'rotating-file', path:'/tmp/SomeRotatingLog.log'}]);
+						Expect(tmpNewLogStream.length)
+							.that.is.equal(1);
+					}
+				);
+				test
+				(
 					'parse invalid longer log stream',
 					function()
 					{

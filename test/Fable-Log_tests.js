@@ -215,6 +215,29 @@ suite
 				);
 				test
 				(
+					'passing in the rotating file parameter',
+					function(fDone)
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'Mongoooo', LogStreams:[{streamtype:'process.stdout'},{type:'rotating-file', period:'1ms', path:'/tmp/SomeRotatingLog.log'}]});
+						tmpFableLog.initialize();
+						// We have to do this as a series, so we can ensure the connection is done before we start logging.
+						var libAsync = require('async');
+						libAsync.series([
+							function(fNext)
+							{
+								tmpFableLog.initializeMongoStreams(fNext);
+							},
+							function(fNext)
+							{
+								tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
+								tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
+								fDone();
+								fNext();
+							}
+						]);
+					}
+				);				test
+				(
 					'passing in the mongoDB parameter',
 					function(fDone)
 					{
