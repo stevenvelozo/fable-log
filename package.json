@@ -33,6 +33,7 @@
     "bunyan": "1.5.1",
     "bunyan-mongo": "0.1.0",
     "fable-uuid": "~1.0.1",
+    "gelf-stream": "^1.1.0",
     "mongodb": "2.0.49",
     "underscore": "1.8.3"
   }

@@ -140,6 +140,11 @@ var FableLogParameters = function()
 							_MongoStream = new libBunyanMongo();
 							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_MongoStream})
 							break;
+						case 'graylog':
+							var libGelf = require('gelf-stream');
+							_GelfStream = libGelf.forBunyan(pLogStreams[i].server);
+							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_GelfStream})
+							break;
 					}
 				}
 				else if (typeof(pLogStreams[i].stream) === 'object')
