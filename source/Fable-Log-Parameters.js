@@ -16,6 +16,7 @@ var FableLogParameters = function()
 
 		var _Parameters = false;
 
+		var _GelfStream = false;
 		var _MongoStream = false;
 		var _MongoStreamInitialized = false;
 
@@ -139,6 +140,13 @@ var FableLogParameters = function()
 							var libBunyanMongo = require('bunyan-mongo');
 							_MongoStream = new libBunyanMongo();
 							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_MongoStream})
+							break;
+						case 'graylog':
+							var libGelf = require('gelf-stream');
+							var tmpServer = pLogStreams[i].server || '127.0.0.1';
+							var tmpPort = pLogStreams[i].port || 12201;
+							_GelfStream = libGelf.forBunyan(tmpServer, tmpPort);
+							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_GelfStream})
 							break;
 					}
 				}
