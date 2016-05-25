@@ -17,6 +17,7 @@ var FableLogParameters = function()
 		var _Parameters = false;
 
 		var _GelfStream = false;
+		var _ESStream = false;
 		var _MongoStream = false;
 		var _MongoStreamInitialized = false;
 
@@ -139,14 +140,29 @@ var FableLogParameters = function()
 						case 'mongodb':
 							var libBunyanMongo = require('bunyan-mongo');
 							_MongoStream = new libBunyanMongo();
-							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_MongoStream})
+							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_MongoStream});
 							break;
 						case 'graylog':
 							var libGelf = require('gelf-stream');
 							var tmpServer = pLogStreams[i].server || '127.0.0.1';
 							var tmpPort = pLogStreams[i].port || 12201;
 							_GelfStream = libGelf.forBunyan(tmpServer, tmpPort);
-							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_GelfStream})
+							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_GelfStream});
+							break;
+						case 'elasticsearch':
+							var libES = require('bunyan-elasticsearch');
+							var tmpIndex = pLogStreams[i].index || 'logs';
+							var tmpServer = pLogStreams[i].server || '127.0.0.1';
+							var tmpPort = pLogStreams[i].port || 9200;
+							_ESStream = new libES({
+								index: tmpIndex,
+								type: 'logs',
+								host: tmpServer + ':' + tmpPort
+							});
+							_ESStream.on('error', function (err) {
+							  console.log('[fable-log] Elasticsearch Stream Error:', err.stack);
+							});
+							tmpStreams.push({ level:tmpLogLevel, stream:_ESStream});
 							break;
 					}
 				}
