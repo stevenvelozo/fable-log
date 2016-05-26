@@ -1,6 +1,6 @@
 {
   "name": "fable-log",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A simple logging wrapper.",
   "main": "source/Fable-Log.js",
   "scripts": {
@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "bunyan": "1.5.1",
+    "bunyan-elasticsearch": "^1.0.0",
     "bunyan-mongo": "0.1.0",
     "fable-uuid": "~1.0.1",
     "gelf-stream": "^1.1.0",
