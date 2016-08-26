@@ -151,11 +151,11 @@ var FableLogParameters = function()
 							break;
 						case 'elasticsearch':
 							var libES = require('bunyan-elasticsearch');
-							var tmpIndex = pLogStreams[i].index || 'logs';
+							var tmpIndexPattern = pLogStreams[i].indexPattern || '[logs-]YYYY.MM.DD';
 							var tmpServer = pLogStreams[i].server || '127.0.0.1';
 							var tmpPort = pLogStreams[i].port || 9200;
 							_ESStream = new libES({
-								index: tmpIndex,
+								indexPattern: tmpIndexPattern,
 								type: 'logs',
 								host: tmpServer + ':' + tmpPort
 							});
