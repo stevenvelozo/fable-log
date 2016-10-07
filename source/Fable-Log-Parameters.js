@@ -142,6 +142,13 @@ var FableLogParameters = function()
 							_MongoStream = new libBunyanMongo();
 							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_MongoStream});
 							break;
+						case 'prettystream':
+							// Add a "pretty stream" (which is like piping output through bunyan)
+							var libPrettyStream = require('bunyan-prettystream');
+							var tmpPrettyStream = new libPrettyStream();
+							tmpPrettyStream.pipe(process.stdout);
+							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:tmpPrettyStream});
+							break;
 						case 'graylog':
 							var libGelf = require('gelf-stream');
 							var tmpServer = pLogStreams[i].server || '127.0.0.1';

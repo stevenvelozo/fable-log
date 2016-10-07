@@ -205,6 +205,21 @@ suite
 				);
 				test
 				(
+					'pretty streams',
+					function()
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'PrettyStream', LogStreams:[{streamtype:'prettystream'}]});
+						tmpFableLog.initialize();
+						tmpFableLog.trace('Trying out pretty streams to Trace...',{Value:"Unlikely",Status:true});
+						tmpFableLog.debug('Trying out pretty streams to Debug...',{Value:"Unlikely",Status:true});
+						tmpFableLog.info('Trying out pretty streams to Info...',{Value:"Unlikely",Status:true});
+						tmpFableLog.warn('Trying out pretty streams to Warning...',{Value:"Unlikely",Status:true});
+						tmpFableLog.error('Trying out pretty streams to Error...',{Value:"Unlikely",Status:true});
+						tmpFableLog.fatal('Trying out pretty streams to Fatal...',{Value:"Unlikely",Status:true});
+					}
+				);
+				test
+				(
 					'passing in a bad mongoDB parameter',
 					function(fDone)
 					{
@@ -236,7 +251,8 @@ suite
 							}
 						]);
 					}
-				);				test
+				);
+				test
 				(
 					'passing in the mongoDB parameter',
 					function(fDone)
