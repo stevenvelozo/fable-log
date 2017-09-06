@@ -17,6 +17,7 @@ var FableLogParameters = function()
 		var _Parameters = false;
 
 		var _GelfStream = false;
+		var _LogStashStream = false;
 		var _ESStream = false;
 		var _MongoStream = false;
 		var _MongoStreamInitialized = false;
@@ -155,6 +156,21 @@ var FableLogParameters = function()
 							var tmpPort = pLogStreams[i].port || 12201;
 							_GelfStream = libGelf.forBunyan(tmpServer, tmpPort);
 							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_GelfStream});
+							break;
+						case 'logstash':
+							var libStash = require('bunyan-logstash-tcp');
+							var tmpServer = pLogStreams[i].server || '127.0.0.1';
+							var tmpPort = pLogStreams[i].port || 5000;
+							_LogStashStream = libStash.createStream({
+								host: tmpServer,
+								port: tmpPort,
+								max_connect_retries: -1,
+								retry_interval: 5000
+							});
+							_LogStashStream.on('error', function (err) {
+								console.log('[fable-log] logstash Stream Error:', err);
+							  });
+							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_LogStashStream});
 							break;
 						case 'elasticsearch':
 							var libES = require('bunyan-elasticsearch');
