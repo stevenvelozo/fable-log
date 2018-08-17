@@ -314,16 +314,6 @@ suite
 							.that.is.equal('fatality');
 					}
 				);
-				test
-				(
-					'initializing a nonexistant mongo stream',
-					function()
-					{
-						var tmpFableLogParameters = require('../source/Fable-Log-Parameters.js').new();
-						console.log(typeof(tmpFableLogParameters.initializeMongoStreams));
-						tmpFableLogParameters.initializeMongoStreams();
-					}
-				);
 			}
 		);
 	}

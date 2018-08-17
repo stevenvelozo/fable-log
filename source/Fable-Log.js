@@ -46,9 +46,6 @@ var FableLog = function()
 			{
 				_UUID = require('fable-uuid').new(_Parameters.parameters).getUUID();
 			}
-
-			// Automagically initialize the Mongo streams if they haven't been
-			_Parameters.initializeMongoStreams();
 		};
 
 
@@ -191,7 +188,6 @@ var FableLog = function()
 		var tmpNewFableLogObject = (
 		{
 			initialize: initialize,
-			initializeMongoStreams: _Parameters.initializeMongoStreams,
 
 			trace: logTrace,
 			debug: logDebug,

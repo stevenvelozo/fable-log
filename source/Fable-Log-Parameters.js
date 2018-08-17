@@ -19,8 +19,6 @@ var FableLogParameters = function()
 		var _GelfStream = false;
 		var _LogStashStream = false;
 		var _ESStream = false;
-		var _MongoStream = false;
-		var _MongoStreamInitialized = false;
 
 		/**
 		* Load a configuration file.
@@ -75,8 +73,7 @@ var FableLogParameters = function()
 							level: "trace",
 							stream: process.stdout
 						}
-					],
-				MongoDBURL: 'mongodb://127.0.0.1:27017/Fable'
+					]
 			});
 
 			// Now mash them together.  The order of priority:
@@ -137,11 +134,6 @@ var FableLogParameters = function()
 						case 'process.stderr':
 							// Add a stderr stream appender
 							tmpStreams.push({ level:tmpLogLevel, stream:process.stderr});
-							break;
-						case 'mongodb':
-							var libBunyanMongo = require('bunyan-mongo');
-							_MongoStream = new libBunyanMongo();
-							tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_MongoStream});
 							break;
 						case 'prettystream':
 							// Add a "pretty stream" (which is like piping output through bunyan)
@@ -214,48 +206,6 @@ var FableLogParameters = function()
 			return tmpStreams;
 		};
 
-		/**
-		* Initialize Mongo Stream if it Exists
-		*
-		* @method initializeMongoStreams
-		* @param {Array} pLogStreams
-		* @return {Array} The parsed log stream object
-		*/
-		var initializeMongoStreams = function(fNext)
-		{
-			// This is here because MongoDB connection methods are async.  This conflicts with logging and unit testing.
-			var tmpNext = (typeof(fNext) !== 'function') ? function() {} : fNext;
-
-			if (!_MongoStream)
-			{
-				tmpNext();
-			}
-			else if (!_MongoStreamInitialized)
-			{
-				_MongoStreamInitialized = true;
-				var libMongoClient = require('mongodb').MongoClient;
-				console.log('Connecting to MongoDB for the Fable Log Mongo provider...');
-				libMongoClient.connect(_Parameters.MongoDBURL,
-					function(pError, pDB)
-					{
-						console.log('...testing MongoDB connection');
-						if (pError !== null)
-						{
-							console.log('   ERROR Connecting to MongoDB: '+pError);
-						}
-						else
-						{
-							_MongoStream.setDB(pDB);							
-						}
-						tmpNext();
-					}
-				);
-			}
-			else
-			{
-				tmpNext();
-			}
-		};
 
 		/**
 		* Container Object for our Factory Pattern
@@ -266,8 +216,6 @@ var FableLogParameters = function()
 			loadConfiguration:loadConfiguration,
 
 			parseLogStreams:parseLogStreams,
-
-			initializeMongoStreams:initializeMongoStreams,
 
 			new:createNew
 		});

@@ -220,28 +220,14 @@ suite
 				);
 				test
 				(
-					'passing in a bad mongoDB parameter',
-					function(fDone)
-					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'Mongoooo', LogStreams:[{streamtype:'mongodb'}], MongoDBURL: 'mongodb://baddburl'});
-						tmpFableLog.initialize();
-						tmpFableLog.initializeMongoStreams(fDone);
-					}
-				);
-				test
-				(
 					'passing in the rotating file parameter',
 					function(fDone)
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'Mongoooo', LogStreams:[{streamtype:'process.stdout'},{type:'rotating-file', period:'1ms', path:'/tmp/SomeRotatingLog.log'}]});
+						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'rotatingoooo', LogStreams:[{streamtype:'process.stdout'},{type:'rotating-file', period:'1ms', path:'/tmp/SomeRotatingLog.log'}]});
 						tmpFableLog.initialize();
 						// We have to do this as a series, so we can ensure the connection is done before we start logging.
 						var libAsync = require('async');
 						libAsync.series([
-							function(fNext)
-							{
-								tmpFableLog.initializeMongoStreams(fNext);
-							},
 							function(fNext)
 							{
 								tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
@@ -250,42 +236,6 @@ suite
 								fNext();
 							}
 						]);
-					}
-				);
-				test
-				(
-					'passing in the mongoDB parameter',
-					function(fDone)
-					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'Mongoooo', LogStreams:[{streamtype:'process.stdout'},{streamtype:'mongodb'}]});
-						tmpFableLog.initialize();
-						// We have to do this as a series, so we can ensure the connection is done before we start logging.
-						var libAsync = require('async');
-						libAsync.series([
-							function(fNext)
-							{
-								tmpFableLog.initializeMongoStreams(fNext);
-							},
-							function(fNext)
-							{
-								tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
-								tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
-								fDone();
-								fNext();
-							}
-						]);
-					}
-				);
-				test
-				(
-					'implicit mongodb initialization',
-					function(fDone)
-					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'Mongoooo', LogStreams:[{streamtype:'process.stdout'},{streamtype:'mongodb'}]});
-						tmpFableLog.initialize();
-						// We have to do this as a series, so we can ensure the connection is done before we start logging.
-						tmpFableLog.info('Test without explicit mongo initialization '+tmpFableLog.uuid);
-						tmpFableLog.initializeMongoStreams(fDone);
 					}
 				);
 			}
