@@ -12,3 +12,6 @@ echo "Creating the data folder..."
 mkdir data
 echo "Launching MongoDB..."
 mongod --bind_ip=$IP --dbpath=data --nojournal --rest "$@"
+echo ""
+echo "If mongo complains about bad shutdown detected (which happens when the cloud9 thing goes bananas) run this:"
+echo "mongod --dbpath ./data --repair"
