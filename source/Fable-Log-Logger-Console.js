@@ -1,0 +1,1 @@
+Fable-Log-Logger-Console.js

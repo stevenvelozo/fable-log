@@ -13,237 +13,52 @@
 * @class FableLog
 * @constructor
 */
-var FableLog = function()
+class FableLog
 {
-	function createNew(pFromParameters)
+	constructor(pFableSettings, pFable)
 	{
-		var _Parameters = require('./Fable-Log-Parameters.js').new(pFromParameters);
+		this._Settings = (typeof(pFableSettings) !== 'object') ? pFableSettings : {};
 
-		var _Log = false;
-		var _UUID = false;
+		this.loggersTrace = [];
+		this.loggersDebug = [];
+		this.loggersInfo = [];
+		this.loggersWarn = [];
+		this.loggersError = [];
+		this.loggersFatal = [];
+	}
 
-		var initialize = function(pConfigurationFileName)
+	trace(pMessage, pDatum)
+	{
+		for (let i = 0; i < this.loggersTrace.length; i++)
 		{
-			var tmpConfigurationFileName = (typeof(pConfigurationFileName) === 'string') ? pConfigurationFileName : false;
+			this.loggersTrace.trace(pMessage, pDatum);
+		}
+	}
 
-			// Load the configuration file for log parameters, if one exists
-			if (tmpConfigurationFileName)
-			{
-				_Parameters.loadConfiguration(tmpConfigurationFileName);
-			}
-
-			_Parameters.initializeConfiguration();
-
-			// Now create the Bunyan log object
-			_Log = require('bunyan').createLogger(
-				{
-					name: _Parameters.parameters.Product,
-					streams: _Parameters.parseLogStreams(_Parameters.parameters.LogStreams)
-				});
-
-			// Only create a UUID if one wasn't previously set.
-			if (!_UUID)
-			{
-				_UUID = require('fable-uuid').new(_Parameters.parameters).getUUID();
-			}
-		};
-
-
-		/**
-		* Write a message to the TRACE stream.
-		*
-		* @method logTrace
-		* @param {String} pMessage A short text description of the event
-		* @param {Object} pDatum Any objects that are important to this event
-		* @return {Boolean} Returns whether the log event worked.
-		*/
-		var logTrace = function(pMessage, pDatum)
+	debug(pMessage, pDatum)
+	{
+		for (let i = 0; i < this.loggersDebug.length; i++)
 		{
-			if (!_Log)
-			{
-				return false;
-			}
+			this.loggersDebug.debug(pMessage,pDatum);
+		}
+	}
 
-			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
-			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
-
-			_Log.trace({Source:_UUID, ver:_Parameters.parameters.ProductVersion, datum:tmpDatum}, tmpMessage);
-			return true;
-		};
-
-		/**
-		* Write a message to the DEBUG stream.
-		*
-		* @method logDebug
-		* @param {String} pMessage A short text description of the event
-		* @param {Object} pDatum Any objects that are important to this event
-		* @return {Boolean} Returns whether the log event worked.
-		*/
-		var logDebug = function(pMessage, pDatum)
-		{
-			if (!_Log)
-			{
-				return false;
-			}
-
-			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
-			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
-
-			_Log.debug({Source:_UUID, ver:_Parameters.parameters.ProductVersion, datum:tmpDatum}, tmpMessage);
-			return true;
-		};
-
-		/**
-		* Write a message to the INFO stream.
-		*
-		* @method logInfo
-		* @param {String} pMessage A short text description of the event
-		* @param {Object} pDatum Any objects that are important to this event
-		* @return {Boolean} Returns whether the log event worked.
-		*/
-		var logInfo = function(pMessage, pDatum)
-		{
-			if (!_Log)
-			{
-				return false;
-			}
-
-			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
-			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
-
-			_Log.info({Source:_UUID, ver:_Parameters.parameters.ProductVersion, datum:tmpDatum}, tmpMessage);
-			return true;
-		};
-
-		/**
-		* Write a message to the WARNING stream.
-		*
-		* @method logWarn
-		* @param {String} pMessage A short text description of the event
-		* @param {Object} pDatum Any objects that are important to this event
-		* @return {Boolean} Returns whether the log event worked.
-		*/
-		var logWarn = function(pMessage, pDatum)
-		{
-			if (!_Log)
-			{
-				return false;
-			}
-
-			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
-			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
-
-			_Log.warn({Source:_UUID, ver:_Parameters.parameters.ProductVersion, datum:tmpDatum}, tmpMessage);
-			return true;
-		};
-
-		/**
-		* Write a message to the ERROR stream.
-		*
-		* @method logError
-		* @param {String} pMessage A short text description of the event
-		* @param {Object} pDatum Any objects that are important to this event
-		* @return {Boolean} Returns whether the log event worked.
-		*/
-		var logError = function(pMessage, pDatum)
-		{
-			if (!_Log)
-			{
-				return false;
-			}
-
-			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
-			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
-
-			_Log.error({Source:_UUID, ver:_Parameters.parameters.ProductVersion, datum:tmpDatum}, tmpMessage);
-			return true;
-		};
-
-		/**
-		* Write a message to the FATAL stream.
-		*
-		* @method logFatal
-		* @param {String} pMessage A short text description of the event
-		* @param {Object} pDatum Any objects that are important to this event
-		* @return {Boolean} Returns whether the log event worked.
-		*/
-		var logFatal = function(pMessage, pDatum)
-		{
-			if (!_Log)
-			{
-				return false;
-			}
-
-			var tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
-			var tmpMessage = (typeof(pMessage) !== 'string') ? 'No message' : pMessage;
-
-			_Log.fatal({Source:_UUID, ver:_Parameters.parameters.ProductVersion, datum:tmpDatum}, tmpMessage);
-			return true;
-		};
-
-
-		/**
-		* Container Object for our Factory Pattern
-		*/
-		var tmpNewFableLogObject = (
-		{
-			initialize: initialize,
-
-			trace: logTrace,
-			debug: logDebug,
-			info: logInfo,
-			warn: logWarn,
-			error: logError,
-			fatal: logFatal,
+	info(pMessage, pDatum)
+	{
+		: logInfo,
+warn: logWarn,
+error: logError,
+fatal: logFatal,
 
 			new: createNew
 		});
+}
 
-		/**
-		 * Raw Bunyan Logger
-		 *
-		 * This is exposed for complex logging calls.  Only recommended for debug and
-		 * lower level logging.
-		 *
-		 * @property logger
-		 * @type Object
-		 */
-		Object.defineProperty(tmpNewFableLogObject, 'logger',
-			{
-				get: function() { return _Log; },
-				enumerable: false
-			});
+// This is for backwards compatibility
+function autoConstruct(pSettings)
+{
+	return new FableLog(pSettings);
+}
 
-		/**
-		 * Log File Parameters
-		 *
-		 * @property parameters
-		 * @type Object
-		 */
-		Object.defineProperty(tmpNewFableLogObject, 'parameters',
-			{
-				get: function() { return _Parameters; },
-				set: function(pParameters) { _Parameters = pParameters; },
-				enumerable: true
-			});
 
-		/**
-		 * Universally Unique Identifier
-		 *
-		 * @property uuid
-		 * @type string
-		 */
-		Object.defineProperty(tmpNewFableLogObject, 'uuid',
-			{
-				get: function() { return _UUID; },
-				set: function(pUUID) { _UUID = pUUID; },
-				enumerable: true
-			});
-
-		return tmpNewFableLogObject;
-	}
-
-	return createNew();
-};
-
-module.exports = new FableLog();
+module.exports = {new:autoConstruct, FableLog:FableLog};
