@@ -8,7 +8,7 @@
 
 class BaseLogger
 {
-	constructor(pSettings, pLogStream)
+	constructor(pSettings)
 	{
 		// The base logger does nothing so has no state.
 	}

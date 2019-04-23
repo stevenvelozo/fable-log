@@ -44,11 +44,9 @@ suite
 					{
 						var tmpFableLog = require('../source/Fable-Log.js').new();
 						tmpFableLog.initialize();
-						Expect(tmpFableLog).to.have.a.property('parameters')
+						Expect(tmpFableLog).to.have.a.property('_Settings')
 							.that.is.a('object');
-						Expect(tmpFableLog).to.have.a.property('logger')
-							.that.is.a('object');
-						Expect(tmpFableLog).to.have.a.property('uuid')
+						Expect(tmpFableLog).to.have.a.property('_UUID')
 							.that.is.a('string');
 					}
 				);
