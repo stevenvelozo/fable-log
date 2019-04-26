@@ -45,10 +45,10 @@ class FableLog
 		// Make sure a kosher level was passed in
 		switch (tmpLevel)
 		{
-			case 'debug':
-				this.logStreamsDebug.push(pLogger);
 			case 'trace':
 				this.logStreamsTrace.push(pLogger);
+			case 'debug':
+				this.logStreamsDebug.push(pLogger);
 			case 'info':
 				this.logStreamsInfo.push(pLogger);
 			case 'warn':

@@ -132,7 +132,7 @@ suite
 					'manual logging to bunyan',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{level:'debug'}]});
+						var tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{level:'trace'}]});
 						tmpFableLog.initialize();
 						tmpFableLog.logStreamsTrace[0].trace('Test of manual Trace');
 					}
