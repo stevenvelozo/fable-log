@@ -17,97 +17,120 @@ class FableLog
 {
 	constructor(pFableSettings, pFable)
 	{
-		this._Settings = (typeof(pFableSettings) !== 'object') ? pFableSettings : {};
+		let tmpSettings = (typeof(pFableSettings) === 'object') ? pFableSettings : {}
+		this._Settings = tmpSettings;
 
-		this.loggersTrace = [];
-		this.loggersDebug = [];
-		this.loggersInfo = [];
-		this.loggersWarn = [];
-		this.loggersError = [];
-		this.loggersFatal = [];
+		this._Providers = require('./Fable-Log-DefaultProviders.js');
+
+		this._StreamDefinitions = (tmpSettings.hasOwnProperty('LogStreams')) ? tmpSettings.LogStreams : require('./Fable-Log-DefaultStreams.json');
+
+		this.logStreams = [];
+
+		this.logStreamsTrace = [];
+		this.logStreamsDebug = [];
+		this.logStreamsInfo = [];
+		this.logStreamsWarn = [];
+		this.logStreamsError = [];
+		this.logStreamsFatal = [];
+
+		this.uuid = (typeof(tmpSettings.Product) === 'string') ? tmpSettings.Product : 'Default';
 	}
 
 	addLogger(pLogger, pLevel)
 	{
 		let tmpLevel = (typeof(pLevel) === 'string') ? pLevel : 'info';
 
+		this.logStreams.push(pLogger);
+
 		// Make sure a kosher level was passed in
 		switch (tmpLevel)
 		{
-			case 'trace':
-				this.loggersTrace.push(pLogger);
 			case 'debug':
-				this.loggersDebug.push(pLogger);
+				this.logStreamsDebug.push(pLogger);
+			case 'trace':
+				this.logStreamsTrace.push(pLogger);
 			case 'info':
-				this.loggersInfo.push(pLogger);
+				this.logStreamsInfo.push(pLogger);
 			case 'warn':
-				this.loggersWarn.push(pLogger);
+				this.logStreamsWarn.push(pLogger);
 			case 'error':
-				this.loggersError.push(pLogger);
+				this.logStreamsError.push(pLogger);
 			case 'fatal':
-				this.loggersFatal.push(pLogger);
+				this.logStreamsFatal.push(pLogger);
 				break;
 			default:
 				// By default (invalid string) make it an "info" logger
-				this.loggersInfo.push(pLogger);
-				this.loggersWarn.push(pLogger);
-				this.loggersError.push(pLogger);
-				this.loggersFatal.push(pLogger);
+				this.logStreamsInfo.push(pLogger);
+				this.logStreamsWarn.push(pLogger);
+				this.logStreamsError.push(pLogger);
+				this.logStreamsFatal.push(pLogger);
 				break;
 		}
 	}
 
 	trace(pMessage, pDatum)
 	{
-		for (let i = 0; i < this.loggersTrace.length; i++)
+		for (let i = 0; i < this.logStreamsTrace.length; i++)
 		{
-			this.loggersTrace.trace(pMessage, pDatum);
+			this.logStreamsTrace[i].trace(pMessage, pDatum);
 		}
 	}
 
 	debug(pMessage, pDatum)
 	{
-		for (let i = 0; i < this.loggersDebug.length; i++)
+		for (let i = 0; i < this.logStreamsDebug.length; i++)
 		{
-			this.loggersDebug.debug(pMessage,pDatum);
+			this.logStreamsDebug[i].debug(pMessage, pDatum);
 		}
 	}
 
 	info(pMessage, pDatum)
 	{
-		for (let i = 0; i < this.loggersInfo.length; i++)
+		for (let i = 0; i < this.logStreamsInfo.length; i++)
 		{
-			this.loggersInfo.debug(pMessage,pDatum);
+			this.logStreamsInfo[i].info(pMessage, pDatum);
 		}
 	}
 
 	warn(pMessage, pDatum)
 	{
-		for (let i = 0; i < this.loggersWarn.length; i++)
+		for (let i = 0; i < this.logStreamsWarn.length; i++)
 		{
-			this.loggersWarn.debug(pMessage,pDatum);
+			this.logStreamsWarn[i].warn(pMessage, pDatum);
 		}
 	}
 
 	error(pMessage, pDatum)
 	{
-		for (let i = 0; i < this.loggersError.length; i++)
+		for (let i = 0; i < this.logStreamsError.length; i++)
 		{
-			this.loggersError.debug(pMessage,pDatum);
+			this.logStreamsError[i].error(pMessage, pDatum);
 		}
 	}
 
 	fatal(pMessage, pDatum)
 	{
-		for (let i = 0; i < this.loggersFatal.length; i++)
+		for (let i = 0; i < this.logStreamsFatal.length; i++)
 		{
-			this.loggersFatal.debug(pMessage,pDatum);
+			this.logStreamsFatal[i].fatal(pMessage, pDatum);
 		}
 	}
 
 	initialize()
 	{
-		// "initialize" each logger.
+		// "initialize" each logger as defined in the logging parameters
+		for (let i = 0; i < this._StreamDefinitions.length; i++)
+		{
+			let tmpStreamDefinition = Object.assign({loggertype:'console',streamtype:'console',level:'info'},this._StreamDefinitions[i]);
+
+			if (!this._Providers.hasOwnProperty(tmpStreamDefinition.loggertype))
+			{
+				console.log(`Error initializing log stream: bad loggertype in stream definition ${JSON.stringify(tmpStreamDefinition)}`);
+				return false;
+			}
+
+			this.addLogger(new this._Providers[tmpStreamDefinition.loggertype](tmpStreamDefinition, this), tmpStreamDefinition.level);
+		}
 	}
 }
 

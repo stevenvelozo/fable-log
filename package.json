@@ -27,6 +27,7 @@
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
+    "async": "^2.6.2",
     "browserify": "^16.2.3",
     "chai": "4.2.0",
     "gulp": "^4.0.0",

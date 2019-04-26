@@ -10,6 +10,8 @@ var Chai = require("chai");
 var Expect = Chai.expect;
 var Assert = Chai.assert;
 
+var libFableLog = require('../source/Fable-Log.js').FableLog;
+
 suite
 (
 	'Fable-Log',
@@ -32,7 +34,7 @@ suite
 					'initialize should build a happy little object',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new();
+						var tmpFableLog = new libFableLog();
 						Expect(tmpFableLog)
 							.to.be.an('object', 'Fable-Log should initialize as an object directly from the require statement.');
 					}
@@ -46,8 +48,6 @@ suite
 						tmpFableLog.initialize();
 						Expect(tmpFableLog).to.have.a.property('_Settings')
 							.that.is.a('object');
-						Expect(tmpFableLog).to.have.a.property('_UUID')
-							.that.is.a('string');
 					}
 				);
 			}
@@ -132,9 +132,9 @@ suite
 					'manual logging to bunyan',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new();
+						var tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{level:'debug'}]});
 						tmpFableLog.initialize();
-						tmpFableLog.logger.trace('Test of manual Trace');
+						tmpFableLog.logStreamsTrace[0].trace('Test of manual Trace');
 					}
 				);
 			}
@@ -157,19 +157,6 @@ suite
 				);
 				test
 				(
-					'passing parameters in',
-					function()
-					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'ForcedProduct'});
-						tmpFableLog.initialize();
-						tmpFableLog.info('Test 3');
-						Expect(tmpFableLog.parameters.parameters.Product)
-							.to.equal('ForcedProduct')
-
-					}
-				);
-				test
-				(
 					'setting a UUID',
 					function()
 					{
@@ -187,18 +174,6 @@ suite
 						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'Paramset', ProductVersion:'9.8.7'});
 						tmpFableLog.initialize('../test/Fable-Log-Parameters_test.json');
 						tmpFableLog.info('Test with custom params: '+tmpFableLog.uuid);
-					}
-				);
-				test
-				(
-					'passing in a parameters object',
-					function()
-					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'Paramset', ProductVersion:'9.8.7'});
-						// This should overwrite the parameters we set above entirely.
-						tmpFableLog.parameters = require('../source/Fable-Log-Parameters.js').new();
-						tmpFableLog.initialize();
-						tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
 					}
 				);
 				test

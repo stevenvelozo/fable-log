@@ -8,7 +8,7 @@
 
 class BaseLogger
 {
-	constructor(pSettings)
+	constructor(pSettings, pFableLog)
 	{
 		// The base logger does nothing so has no state.
 	}

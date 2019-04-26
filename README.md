@@ -15,10 +15,13 @@ How to Use This
 
 You have to checkout the module from npm:
 
+```
     $ npm install fable-log
+```
 
 Then everything should just work, without configuration, as a bunyan console logger:
 
+```
     var fableLog = require('fable-log').new();
     fableLog.initialize();
     fableLog.trace('Testing object sending to Trace...',{Value:"Unlikely",Status:true});
@@ -27,25 +30,31 @@ Then everything should just work, without configuration, as a bunyan console log
     fableLog.warn('Testing object sending to Warning...',{Value:"Unlikely",Status:true});
     fableLog.error('Testing object sending to Error...',{Value:"Unlikely",Status:true});
     fableLog.fatal('Testing object sending to Fatal...',{Value:"Unlikely",Status:true});
+```
 
 Which should output the following garbage-looking content to the command-line:
 
+```
 	{"name":"Fable","hostname":"Stevens-Mac-Pro.local","pid":58264,"level":10,"Source":"0x532004ec61800000","ver":"0.0.0","datum":{"Value":"Unlikely","Status":true},"msg":"Testing object sending to Trace...","time":"2015-04-03T16:18:36.551Z","v":0}
 	{"name":"Fable","hostname":"Stevens-Mac-Pro.local","pid":58264,"level":20,"Source":"0x532004ec61800000","ver":"0.0.0","datum":{"Value":"Unlikely","Status":true},"msg":"Testing object sending to Debug...","time":"2015-04-03T16:18:36.551Z","v":0}
 	{"name":"Fable","hostname":"Stevens-Mac-Pro.local","pid":58264,"level":30,"Source":"0x532004ec61800000","ver":"0.0.0","datum":{"Value":"Unlikely","Status":true},"msg":"Testing object sending to Info...","time":"2015-04-03T16:18:36.551Z","v":0}
 	{"name":"Fable","hostname":"Stevens-Mac-Pro.local","pid":58264,"level":40,"Source":"0x532004ec61800000","ver":"0.0.0","datum":{"Value":"Unlikely","Status":true},"msg":"Testing object sending to Warning...","time":"2015-04-03T16:18:36.551Z","v":0}
 	{"name":"Fable","hostname":"Stevens-Mac-Pro.local","pid":58264,"level":50,"Source":"0x532004ec61800000","ver":"0.0.0","datum":{"Value":"Unlikely","Status":true},"msg":"Testing object sending to Error...","time":"2015-04-03T16:18:36.551Z","v":0}
 	{"name":"Fable","hostname":"Stevens-Mac-Pro.local","pid":58264,"level":60,"Source":"0x532004ec61800000","ver":"0.0.0","datum":{"Value":"Unlikely","Status":true},"msg":"Testing object sending to Fatal...","time":"2015-04-03T16:18:36.551Z","v":0}
+```
 
 But Those Log Entries are Unreadable!
 -------------
 
 Want console output to be pretty?  Install bunyan globally (may require sudo on some operating systems):
 
+```
     $ npm install -g bunyan
+```
 
 And then pipe your console output through everybodies favorite lumberjack:
 
+```
     $ node MyBestApplicationEver.js | bunyan
     [2015-04-03T16:20:43.435Z] TRACE: Fable/58284 on Stevens-Mac-Pro.local: Testing object sending to Trace... (Source=0x532005684ac00000, ver=0.0.0)
         datum: {
@@ -77,11 +86,13 @@ And then pipe your console output through everybodies favorite lumberjack:
           "Value": "Unlikely",
           "Status": true
         }
+```
 
 If that isn't exciting enough, on my computer these entries are in __all sorts of rainbow colors__!
 
 So, you're sold on this and want to do something more complex, like say have the logs go in two places:
 
+```
 	var fableLogOptions = (
 	        	{
         		Product:'Mongoooo',
@@ -101,8 +112,40 @@ So, you're sold on this and want to do something more complex, like say have the
     fableLog.initialize();
     fableLog.trace('I really like debugging my code.  Here are the fable options!', {Options: fableLogOptions});
     fableLog.info('This is really important info.');
+```
 
 Which will write the info line to both streams, and the trace line just to the console.
+
+Stream Definitions
+------------
+
+A stream definition object has the following options (none are required, defaults are shown):
+
+```
+    {
+        loggertype: 'console',
+        streamtype: 'console',
+        level: 'trace'
+    }
+```
+
+Stream types can also have their own parameters -- for instance Bunyan has a path for the log file.
+
+```
+    {
+        loggertype: 'bunyan',
+        streamtype: 'process.stdout',
+        level: 'info'
+    },
+    {
+        loggertype: 'bunyan',
+        streamtype: 'file',
+        level: 'trace',
+        path: './MyFirstLogFile.log'
+    }
+```
+
+
 
 Scalable Functionality
 ------------

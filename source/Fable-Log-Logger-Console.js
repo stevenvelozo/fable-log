@@ -2,17 +2,21 @@ let libBaseLogger = require('./Fable-Log-BaseLogger.js');
 
 class ConsoleLogger extends libBaseLogger
 {
-	constructor(pSettings, pLogStream)
+	constructor(pSettings, pFableLog)
 	{
+		super(pSettings)
+
 		this._Settings = (typeof(pSettings) === 'object') ? pSettings : {};
 
-		this._ShowTimeStamps = pSettings.hasOwnProperty('ShowTimeStamps') ? (pSettings.ShowTimeStamps == true) ? false;
-		this._FormattedTimeStamps = pSettings.hasOwnProperty('FormattedTimeStamps') ? (pSettings.FormattedTimeStamps == true) ? false;
+		this._ShowTimeStamps = pSettings.hasOwnProperty('ShowTimeStamps') ? (pSettings.ShowTimeStamps == true) : false;
+		this._FormattedTimeStamps = pSettings.hasOwnProperty('FormattedTimeStamps') ? (pSettings.FormattedTimeStamps == true) : false;
 
-		this._ContextMessage = pSettings.hasOwnProperty('Context') ? ` (${pSettings.Context})` : '';
+		this._ContextMessage = pSettings.hasOwnProperty('Context') ? ` (${pSettings.Context})` : 
+								pFableLog._Settings.hasOwnProperty('Product') ? ` (${pFableLog._Settings.Product})` :
+								'';
 	}
 
-	writeConsole(pLevel, pLogText, pObject)
+	write(pLevel, pLogText, pObject)
 	{
 		if (this._ShowTimeStamps && this._FormattedTimeStamps)
 		{
@@ -37,3 +41,5 @@ class ConsoleLogger extends libBaseLogger
 	}
 
 }
+
+module.exports = ConsoleLogger;
