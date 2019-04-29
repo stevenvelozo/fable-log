@@ -1,67 +1,100 @@
 let libBaseLogger = require('./Fable-Log-BaseLogger.js');
 let libBunyan = require('bunyan');
 
-class ConsoleLogger extends libBaseLogger
+class BunyanLogger extends libBaseLogger
 {
-	constructor(pSettings, pFableLog)
+	constructor(pLogStreamSettings, pFableLog)
 	{
-		super(pSettings);
+		super(pLogStreamSettings);
 
-		this._Settings = (typeof(pSettings) === 'object') ? pSettings : {};
+		this._Settings = (typeof(pLogStreamSettings) === 'object') ? pLogStreamSettings : {};
 
-		this._Product = pFableLog._Settings.hasOwnProperty('Product') ? ` (${pFableLog._Settings.Product})` : 'Default';
+		this._Product = pFableLog.uuid;
 
-		this._UUID = Object.assign({DataCenter:0, Worker:0}, (typeof(pFableLog._Settings.UUID) ? 'object') ? pFableLog._Settings.UUID : {});
+		this._LogProviders = pFableLog.logProviders;
 
+		// Create a container to hold the log streams
+		if (!pFableLog.logProviders.hasOwnProperty('bunyan_streams'))
+		{
+			pFableLog.logProviders.bunyan_streams = [];
+		}
+		// Create a container to hold bunyan
+		if (!pFableLog.logProviders.hasOwnProperty('bunyan'))
+		{
+			pFableLog.logProviders.bunyan = false;
+		}
 
-		switch(pLogStreams[i].streamtype)
+		switch(pLogStreamSettings.streamtype)
 		{
 			case 'process.stdout':
+			case 'stdout':
 				// Add a stdout stream appender
-				tmpStreams.push({ level:tmpLogLevel, stream:process.stdout});
+				pFableLog.logProviders.bunyan_streams.push({ level:pLogStreamSettings.level, stream:process.stdout });
 				break;
 			case 'process.stderr':
+			case 'stderr':
 				// Add a stderr stream appender
-				tmpStreams.push({ level:tmpLogLevel, stream:process.stderr});
+				pFableLog.logProviders.bunyan_streams.push({ level:pLogStreamSettings.level, stream:process.stderr });
 				break;
 			case 'prettystream':
 				// Add a "pretty stream" (which is like piping output through bunyan)
-				var libPrettyStream = require('bunyan-prettystream');
-				var tmpPrettyStream = new libPrettyStream();
+				let libPrettyStream = require('bunyan-prettystream');
+				let tmpPrettyStream = new libPrettyStream();
 				tmpPrettyStream.pipe(process.stdout);
-				tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:tmpPrettyStream});
+				pFableLog.logProviders.bunyan_streams.push({ level:pLogStreamSettings.level, type:'raw', stream:tmpPrettyStream });
 				break;
 			case 'logstash':
-				var libStash = require('bunyan-logstash-tcp');
-				var tmpServer = pLogStreams[i].server || '127.0.0.1';
-				var tmpPort = pLogStreams[i].port || 5000;
-				_LogStashStream = libStash.createStream({
-					host: tmpServer,
-					port: tmpPort,
-					max_connect_retries: -1,
-					retry_interval: 5000
-				});
-				_LogStashStream.on('error', function (err) {
-					console.log('[fable-log] logstash Stream Error:', err);
+				let libStash = require('bunyan-logstash-tcp');
+				let tmpLogStashStream = libStash.createStream(
+					{
+						host: pLogStreamSettings.server || '127.0.0.1',
+						port: pLogStreamSettings.port || 5000,
+						max_connect_retries: -1,
+						retry_interval: 5000
 					});
-				tmpStreams.push({ level:tmpLogLevel, type: 'raw', stream:_LogStashStream});
+				tmpLogStashStream.on('error', 
+					(pError) =>
+					{
+						console.log('[fable-log] logstash Stream Error: ', pError);
+					});
+				this._LogStashStream = tmpLogStashStream;
+				pFableLog.logProviders.bunyan_streams.push({ level:pLogStreamSettings.level, type: 'raw', stream:tmpLogStashStream });
 				break;
-			case 'elasticsearch':
-				var libES = require('bunyan-elasticsearch');
-				var tmpIndexPattern = pLogStreams[i].indexPattern || '[logs-]YYYY.MM.DD';
-				var tmpServer = pLogStreams[i].server || '127.0.0.1';
-				var tmpPort = pLogStreams[i].port || 9200;
-				_ESStream = new libES({
-					indexPattern: tmpIndexPattern,
-					type: 'logs',
-					host: tmpServer + ':' + tmpPort
-				});
-				_ESStream.on('error', function (err) {
-					console.log('[fable-log] Elasticsearch Stream Error:', err.stack);
-				});
-				tmpStreams.push({ level:tmpLogLevel, stream:_ESStream});
+			case 'file':
+			default:
+				if (pLogStreamSettings.hasOwnProperty('path'))
+				{
+					tmpStreams.push({ level:pLogStreamSettings.level, path:pLogStreamSettings.path});
+				}
+				else
+				{
+					// If no path was specified, just use stdout.
+					pFableLog.logProviders.bunyan_streams.push({ level:pLogStreamSettings.level, stream:process.stdout });
+				}
 				break;
-			tmpStreams.push({ level:tmpLogLevel, path:pLogStreams[i].path});
 		}
 	}
+
+	initialize()
+	{
+		if (!this._LogProviders.bunyan)
+		{
+			this._LogProviders.bunyan = require('bunyan').createLogger(
+				{
+					name: this._Product,
+					streams: this._LogProviders.bunyan_streams
+				});
+		}
+	}
+
+	info(pMessage, pDatum)
+	{
+		let tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
+		let tmpMessage = (typeof(pMessage) !== 'string') ? '' : pMessage;
+
+		this._LogProviders.bunyan.warn({Source:this._Product, datum:tmpDatum}, tmpMessage);
+		return true;
+	}
 }
+
+module.exports = BunyanLogger;

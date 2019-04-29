@@ -26,6 +26,10 @@ class FableLog
 
 		this.logStreams = [];
 
+		// This object gets decorated for one-time instantiated providers that
+		//  have multiple outputs, such as bunyan.
+		this.logProviders = {};
+
 		this.logStreamsTrace = [];
 		this.logStreamsDebug = [];
 		this.logStreamsInfo = [];
@@ -130,6 +134,12 @@ class FableLog
 			}
 
 			this.addLogger(new this._Providers[tmpStreamDefinition.loggertype](tmpStreamDefinition, this), tmpStreamDefinition.level);
+		}
+
+		// Now initialize each one.
+		for (let i = 0; i < this.logStreams.length; i++)
+		{
+			this.logStreams[i].initialize();
 		}
 	}
 }

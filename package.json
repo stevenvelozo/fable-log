@@ -41,6 +41,8 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "dependencies": {
-    "bunyan": "^1.8.12"
+    "bunyan": "^1.8.12",
+    "bunyan-logstash-tcp": "^1.0.0",
+    "bunyan-prettystream": "^0.1.3"
   }
 }

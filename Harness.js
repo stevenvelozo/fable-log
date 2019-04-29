@@ -1,6 +1,16 @@
 let libFableLog = require('./source/Fable-Log.js');
 
-let tmpLog = new libFableLog.FableLog({LogStreams:[{level:'debug'}]});
+let tmpLog = new libFableLog.FableLog(
+	{
+		LogStreams:
+		[
+			{
+				loggertype:'bunyan',
+				streamtype:'stdout',
+				level:'debug'
+			}
+		]
+	});
 
 tmpLog.initialize();
 

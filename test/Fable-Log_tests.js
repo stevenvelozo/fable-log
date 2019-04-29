@@ -213,5 +213,24 @@ suite
 				);
 			}
 		);
+
+		suite
+		(
+			'Bunyan',
+			function()
+			{
+				test
+				(
+					'create a bunyan logger',
+					function()
+					{
+						var tmpFableLog = new libFableLog();
+						Expect(tmpFableLog)
+							.to.be.an('object', 'Fable-Log should initialize as an object directly from the require statement.');
+					}
+				);
+			}
+		);
+
 	}
 );

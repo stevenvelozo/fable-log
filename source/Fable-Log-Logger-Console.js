@@ -2,16 +2,16 @@ let libBaseLogger = require('./Fable-Log-BaseLogger.js');
 
 class ConsoleLogger extends libBaseLogger
 {
-	constructor(pSettings, pFableLog)
+	constructor(pLogStreamSettings, pFableLog)
 	{
-		super(pSettings)
+		super(pLogStreamSettings)
 
-		this._Settings = (typeof(pSettings) === 'object') ? pSettings : {};
+		this._Settings = (typeof(pLogStreamSettings) === 'object') ? pLogStreamSettings : {};
 
-		this._ShowTimeStamps = pSettings.hasOwnProperty('ShowTimeStamps') ? (pSettings.ShowTimeStamps == true) : false;
-		this._FormattedTimeStamps = pSettings.hasOwnProperty('FormattedTimeStamps') ? (pSettings.FormattedTimeStamps == true) : false;
+		this._ShowTimeStamps = pLogStreamSettings.hasOwnProperty('ShowTimeStamps') ? (pLogStreamSettings.ShowTimeStamps == true) : false;
+		this._FormattedTimeStamps = pLogStreamSettings.hasOwnProperty('FormattedTimeStamps') ? (pLogStreamSettings.FormattedTimeStamps == true) : false;
 
-		this._ContextMessage = pSettings.hasOwnProperty('Context') ? ` (${pSettings.Context})` : 
+		this._ContextMessage = pLogStreamSettings.hasOwnProperty('Context') ? ` (${pLogStreamSettings.Context})` : 
 								pFableLog._Settings.hasOwnProperty('Product') ? ` (${pFableLog._Settings.Product})` :
 								'';
 	}
