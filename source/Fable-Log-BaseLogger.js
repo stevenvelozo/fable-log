@@ -5,12 +5,14 @@
 *
 * @author Steven Velozo <steven@velozo.com>
 */
+const libFableUUID = new (require('fable-uuid').FableUUID)();
 
 class BaseLogger
 {
 	constructor(pSettings, pFableLog)
 	{
-		// The base logger does nothing so has no state.
+		// The base logger does nothing but associate a UUID with itself
+		this.loggerUUID = libFableUUID.getUUID();
 	}
 
 	initialize()

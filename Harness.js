@@ -8,6 +8,11 @@ let tmpLog = new libFableLog.FableLog(
 				loggertype:'bunyan',
 				streamtype:'stdout',
 				level:'debug'
+			},
+			{
+				loggertype:'bunyan',
+				level:'debug',
+				path:'./Log.log.log'
 			}
 		]
 	});

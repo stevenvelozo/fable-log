@@ -30,6 +30,9 @@ class FableLog
 		//  have multiple outputs, such as bunyan.
 		this.logProviders = {};
 
+		// A hash list of the GUIDs for each log stream, so they can't be added to the set more than one time
+		this.activeLogStreams = {};
+
 		this.logStreamsTrace = [];
 		this.logStreamsDebug = [];
 		this.logStreamsInfo = [];
@@ -44,7 +47,15 @@ class FableLog
 	{
 		let tmpLevel = (typeof(pLevel) === 'string') ? pLevel : 'info';
 
+		// Bail out if we've already created one.
+		if (this.activeLogStreams.hasOwnProperty(pLogger.loggerUUID))
+		{
+			return false;
+		}
+
+		// Add it to the streams and to the mutex
 		this.logStreams.push(pLogger);
+		this.activeLogStreams[pLogger.loggerUUID] = true;
 
 		// Make sure a kosher level was passed in
 		switch (tmpLevel)
@@ -70,6 +81,8 @@ class FableLog
 				this.logStreamsFatal.push(pLogger);
 				break;
 		}
+
+		return true;
 	}
 
 	trace(pMessage, pDatum)

@@ -7,6 +7,9 @@ class BunyanLogger extends libBaseLogger
 	{
 		super(pLogStreamSettings);
 
+		// Every bunyan logger will have the same logger UUID
+		this.loggerUUID = 'bunyan_logger_singular';
+
 		this._Settings = (typeof(pLogStreamSettings) === 'object') ? pLogStreamSettings : {};
 
 		this._Product = pFableLog.uuid;
@@ -64,12 +67,12 @@ class BunyanLogger extends libBaseLogger
 			default:
 				if (pLogStreamSettings.hasOwnProperty('path'))
 				{
-					tmpStreams.push({ level:pLogStreamSettings.level, path:pLogStreamSettings.path});
+					pFableLog.logProviders.bunyan_streams.push({ level:pLogStreamSettings.level, path:pLogStreamSettings.path});
 				}
 				else
 				{
 					// If no path was specified, just use stdout.
-					pFableLog.logProviders.bunyan_streams.push({ level:pLogStreamSettings.level, stream:process.stdout });
+					pFableLog.logProviders.bunyan_streams.logProviders.bunyan_streams.push({ level:pLogStreamSettings.level, stream:process.stdout });
 				}
 				break;
 		}
