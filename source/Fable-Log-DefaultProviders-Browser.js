@@ -11,9 +11,9 @@ getDefaultProviders = () =>
 {
 	let tmpDefaultProviders = {};
 
-	tmpDefaultProviders.console = require('./Fable-Logger-Console.js');
+	tmpDefaultProviders.console = require('./Fable-Log-Logger-Console.js');
 
 	return tmpDefaultProviders;
 }
 
-module.exports = getDefaultProviders;
+module.exports = getDefaultProviders();

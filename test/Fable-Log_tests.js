@@ -178,21 +178,6 @@ suite
 				);
 				test
 				(
-					'pretty streams',
-					function()
-					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'PrettyStream', LogStreams:[{streamtype:'prettystream'}]});
-						tmpFableLog.initialize();
-						tmpFableLog.trace('Trying out pretty streams to Trace...',{Value:"Unlikely",Status:true});
-						tmpFableLog.debug('Trying out pretty streams to Debug...',{Value:"Unlikely",Status:true});
-						tmpFableLog.info('Trying out pretty streams to Info...',{Value:"Unlikely",Status:true});
-						tmpFableLog.warn('Trying out pretty streams to Warning...',{Value:"Unlikely",Status:true});
-						tmpFableLog.error('Trying out pretty streams to Error...',{Value:"Unlikely",Status:true});
-						tmpFableLog.fatal('Trying out pretty streams to Fatal...',{Value:"Unlikely",Status:true});
-					}
-				);
-				test
-				(
 					'passing in the rotating file parameter',
 					function(fDone)
 					{
@@ -224,9 +209,62 @@ suite
 					'create a bunyan logger',
 					function()
 					{
-						var tmpFableLog = new libFableLog();
-						Expect(tmpFableLog)
-							.to.be.an('object', 'Fable-Log should initialize as an object directly from the require statement.');
+						var tmpFableLog = new libFableLog(
+							{
+								LogStreams:
+								[
+									{
+										loggertype:'bunyan',
+										streamtype:'stdout',
+										level:'debug'
+									},
+									{
+										loggertype:'bunyan',
+										level:'debug',
+										streamtype:'file',
+										path:'./Test-Bunyan.log'
+									}
+								]
+							});
+							Expect(tmpFableLog)
+							.to.be.an('object', 'Bunyan loggers should initialize properly.');
+						tmpFableLog.initialize();
+						tmpFableLog.trace('Bunyan to Trace...',{Value:"Unlikely",Status:false});
+						tmpFableLog.debug('Bunyan to Debug...',{Value:"Unlikely",Status:true});
+						tmpFableLog.info('Bunyan to Info...',{Value:"Unlikely",Status:true});
+						tmpFableLog.warn('Bunyan to Warning...',{Value:"Unlikely",Status:true});
+						tmpFableLog.error('Bunyan to Error...',{Value:"Unlikely",Status:true});
+						tmpFableLog.fatal('Bunyan to Fatal...',{Value:"Unlikely",Status:true});
+					}
+				);
+				test
+				(
+					'pretty streams',
+					function()
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new(
+						{
+							LogStreams:
+							[
+								{
+									loggertype:'bunyan',
+									streamtype:'stdout',
+									level:'trace'
+								},
+								{
+									loggertype:'bunyan',
+									level:'trace',
+									streamtype:'prettystream'
+								}
+							]
+						});
+						tmpFableLog.initialize();
+						tmpFableLog.trace('Trying out pretty streams to Trace...',{Value:"Unlikely",Status:true});
+						tmpFableLog.debug('Trying out pretty streams to Debug...',{Value:"Unlikely",Status:true});
+						tmpFableLog.info('Trying out pretty streams to Info...',{Value:"Unlikely",Status:true});
+						tmpFableLog.warn('Trying out pretty streams to Warning...',{Value:"Unlikely",Status:true});
+						tmpFableLog.error('Trying out pretty streams to Error...',{Value:"Unlikely",Status:true});
+						tmpFableLog.fatal('Trying out pretty streams to Fatal...',{Value:"Unlikely",Status:true});
 					}
 				);
 			}

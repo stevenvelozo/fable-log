@@ -67,7 +67,7 @@ class BunyanLogger extends libBaseLogger
 			default:
 				if (pLogStreamSettings.hasOwnProperty('path'))
 				{
-					pFableLog.logProviders.bunyan_streams.push({ level:pLogStreamSettings.level, path:pLogStreamSettings.path});
+					pFableLog.logProviders.bunyan_streams.push({level:pLogStreamSettings.level, path:pLogStreamSettings.path});
 				}
 				else
 				{
@@ -90,12 +90,51 @@ class BunyanLogger extends libBaseLogger
 		}
 	}
 
-	info(pMessage, pDatum)
+	trace(pLogText, pLogObject)
 	{
-		let tmpDatum = (typeof(pDatum) === 'undefined') ? {} : pDatum;
-		let tmpMessage = (typeof(pMessage) !== 'string') ? '' : pMessage;
+		let tmpDatum = (typeof(pLogObject) === 'undefined') ? {} : pLogObject;
+		let tmpMessage = (typeof(pLogText) !== 'string') ? '' : pLogText;
+		this._LogProviders.bunyan.trace({Source:this._Product, datum:tmpDatum}, tmpMessage);
+		return true;
+	}
 
+	debug(pLogText, pLogObject)
+	{
+		let tmpDatum = (typeof(pLogObject) === 'undefined') ? {} : pLogObject;
+		let tmpMessage = (typeof(pLogText) !== 'string') ? '' : pLogText;
+		this._LogProviders.bunyan.debug({Source:this._Product, datum:tmpDatum}, tmpMessage);
+		return true;
+	}
+
+	info(pLogText, pLogObject)
+	{
+		let tmpDatum = (typeof(pLogObject) === 'undefined') ? {} : pLogObject;
+		let tmpMessage = (typeof(pLogText) !== 'string') ? '' : pLogText;
+		this._LogProviders.bunyan.info({Source:this._Product, datum:tmpDatum}, tmpMessage);
+		return true;
+	}
+
+	warn(pLogText, pLogObject)
+	{
+		let tmpDatum = (typeof(pLogObject) === 'undefined') ? {} : pLogObject;
+		let tmpMessage = (typeof(pLogText) !== 'string') ? '' : pLogText;
 		this._LogProviders.bunyan.warn({Source:this._Product, datum:tmpDatum}, tmpMessage);
+		return true;
+	}
+
+	error(pLogText, pLogObject)
+	{
+		let tmpDatum = (typeof(pLogObject) === 'undefined') ? {} : pLogObject;
+		let tmpMessage = (typeof(pLogText) !== 'string') ? '' : pLogText;
+		this._LogProviders.bunyan.error({Source:this._Product, datum:tmpDatum}, tmpMessage);
+		return true;
+	}
+
+	fatal(pLogText, pLogObject)
+	{
+		let tmpDatum = (typeof(pLogObject) === 'undefined') ? {} : pLogObject;
+		let tmpMessage = (typeof(pLogText) !== 'string') ? '' : pLogText;
+		this._LogProviders.bunyan.fatal({Source:this._Product, datum:tmpDatum}, tmpMessage);
 		return true;
 	}
 }

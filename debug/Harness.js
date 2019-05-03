@@ -12,7 +12,8 @@ let tmpLog = new libFableLog.FableLog(
 			{
 				loggertype:'bunyan',
 				level:'debug',
-				path:'./Log.log.log'
+				streamtype:'file',
+				path:'/tmp/Test-Bunyan.log'
 			}
 		]
 	});

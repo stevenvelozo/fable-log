@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/Harness.js"
+            "program": "${workspaceFolder}/debug/Harness.js"
         }
     ]
 }
