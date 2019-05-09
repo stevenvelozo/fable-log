@@ -50,6 +50,20 @@ suite
 							.that.is.a('object');
 					}
 				);
+				test
+				(
+					'instantiate a base logger class',
+					function()
+					{
+						var tmpFableLogBaseLogger = require('../source/Fable-Log-BaseLogger.js');
+
+						var tmpBaseLogger = new tmpFableLogBaseLogger({});
+
+						Expect(tmpBaseLogger)
+							.to.be.an('object');
+						Expect(tmpBaseLogger.write()).to.equal(true);
+					}
+				);
 			}
 		);
 		suite
@@ -65,6 +79,50 @@ suite
 						var tmpFableLog = require('../source/Fable-Log.js').new();
 						tmpFableLog.initialize();
 						tmpFableLog.info('Test');
+						tmpFableLog.logTime();
+						tmpFableLog.logTime('Time logged...', {With:'someobject'});
+					}
+				);
+				test
+				(
+					'writing custom time events to a log stream',
+					function(fNext)
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new();
+						tmpFableLog.initialize();
+
+						let tmpTimeStamp = tmpFableLog.getTimeStamp();
+
+						setTimeout(
+							()=>
+							{
+								let tmpTimeDelta = tmpFableLog.getTimeDelta(tmpTimeStamp);
+								tmpFableLog.logTimeDelta(tmpTimeDelta);
+								tmpFableLog.logTimeDeltaHuman(tmpTimeDelta);
+								tmpFableLog.logTimeDeltaRelative(tmpTimeStamp, 'Relative Deltas', {Some:'value'});
+								tmpFableLog.logTimeDeltaRelativeHuman(tmpTimeStamp, 'Relative Deltas', {Some:'value'});
+								fNext();
+							}, 505);
+					}
+				);
+				test
+				(
+					'shorter time spans',
+					function()
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new();
+						tmpFableLog.initialize();
+
+						let tmpTimeStamp = tmpFableLog.getTimeStamp();
+
+						tmpFableLog.logTimeDeltaHuman(1, 'Relative Deltas', {Some:'value'});
+						tmpFableLog.logTimeDeltaHuman(10, 'Relative Deltas', {Some:'value'});
+						tmpFableLog.logTimeDeltaHuman(100, 'Relative Deltas', {Some:'value'});
+						tmpFableLog.logTimeDeltaHuman(1000, 'Relative Deltas', {Some:'value'});
+						tmpFableLog.logTimeDeltaHuman(10000, 'Relative Deltas', {Some:'value'});
+						tmpFableLog.logTimeDeltaHuman(100000, 'Relative Deltas', {Some:'value'});
+						tmpFableLog.logTimeDeltaHuman(700000, 'Relative Deltas', {Some:'value'});
+						tmpFableLog.logTimeDeltaHuman(144000000, 'Relative Deltas', {Some:'value'});
 					}
 				);
 				test
@@ -305,6 +363,31 @@ suite
 						tmpFableLog.warn('Trying out pretty streams to Warning...',{Value:"Unlikely",Status:true});
 						tmpFableLog.error('Trying out pretty streams to Error...',{Value:"Unlikely",Status:true});
 						tmpFableLog.fatal('Trying out pretty streams to Fatal...',{Value:"Unlikely",Status:true});
+					}
+				);
+				test
+				(
+					'pretty streams default content',
+					function()
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new(
+						{
+							LogStreams:
+							[
+								{
+									loggertype:'bunyan',
+									level:'trace',
+									streamtype:'prettystream'
+								}
+							]
+						});
+						tmpFableLog.initialize();
+						tmpFableLog.trace();
+						tmpFableLog.debug();
+						tmpFableLog.info();
+						tmpFableLog.warn();
+						tmpFableLog.error();
+						tmpFableLog.fatal();
 					}
 				);
 				test

@@ -7,10 +7,7 @@ class BunyanLogger extends libBaseLogger
 	{
 		super(pLogStreamSettings);
 
-		// Every bunyan logger will have the same logger UUID
 		this.loggerUUID = 'bunyan_logger_singular';
-
-		this._Settings = (typeof(pLogStreamSettings) === 'object') ? pLogStreamSettings : {};
 
 		this._Product = pFableLog.uuid;
 
@@ -80,14 +77,11 @@ class BunyanLogger extends libBaseLogger
 
 	initialize()
 	{
-		if (!this._LogProviders.bunyan)
-		{
-			this._LogProviders.bunyan = require('bunyan').createLogger(
-				{
-					name: this._Product,
-					streams: this._LogProviders.bunyan_streams
-				});
-		}
+		this._LogProviders.bunyan = require('bunyan').createLogger(
+			{
+				name: this._Product,
+				streams: this._LogProviders.bunyan_streams
+			});
 	}
 
 	trace(pLogText, pLogObject)

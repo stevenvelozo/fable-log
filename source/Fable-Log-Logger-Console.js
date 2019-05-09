@@ -6,8 +6,6 @@ class ConsoleLogger extends libBaseLogger
 	{
 		super(pLogStreamSettings)
 
-		this._Settings = (typeof(pLogStreamSettings) === 'object') ? pLogStreamSettings : {};
-
 		this._ShowTimeStamps = pLogStreamSettings.hasOwnProperty('ShowTimeStamps') ? (pLogStreamSettings.ShowTimeStamps == true) : false;
 		this._FormattedTimeStamps = pLogStreamSettings.hasOwnProperty('FormattedTimeStamps') ? (pLogStreamSettings.FormattedTimeStamps == true) : false;
 

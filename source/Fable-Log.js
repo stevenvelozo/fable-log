@@ -45,8 +45,6 @@ class FableLog
 
 	addLogger(pLogger, pLevel)
 	{
-		let tmpLevel = (typeof(pLevel) === 'string') ? pLevel : 'info';
-
 		// Bail out if we've already created one.
 		if (this.activeLogStreams.hasOwnProperty(pLogger.loggerUUID))
 		{
@@ -58,7 +56,7 @@ class FableLog
 		this.activeLogStreams[pLogger.loggerUUID] = true;
 
 		// Make sure a kosher level was passed in
-		switch (tmpLevel)
+		switch (pLevel)
 		{
 			case 'trace':
 				this.logStreamsTrace.push(pLogger);
@@ -148,6 +146,71 @@ class FableLog
 		{
 			this.logStreams[i].initialize();
 		}
+	}
+
+	logTime(pMessage, pDatum)
+	{
+		let tmpMessage = (typeof(pMessage) !== 'undefined') ? pMessage : 'Time';
+		let tmpDatum = (typeof(pDatum) === 'object') ? pDatum : {};
+		let tmpTime = new Date();
+		this.info(`${tmpMessage} ${tmpTime}`, tmpDatum);
+	}
+
+	// Get a timestamp 
+	getTimeStamp()
+	{
+		return +new Date();
+	}
+
+	getTimeDelta(pTimeStamp)
+	{
+		let tmpEndTime = +new Date();
+		return tmpEndTime-pTimeStamp;
+	}
+
+	// Log the delta between a timestamp, and now with a message
+	logTimeDelta(pTimeDelta, pMessage, pDatum)
+	{
+		let tmpMessage = (typeof(pMessage) !== 'undefined') ? pMessage : 'Time Measurement';
+		let tmpDatum = (typeof(pDatum) === 'object') ? pDatum : {};
+
+		let tmpEndTime = +new Date();
+
+		tmpDatum.TimeDelta = {Message: tmpMessage, TimeDeltaMilliseconds: pTimeDelta};
+
+		this.info(`${tmpMessage} (${pTimeDelta}ms)`, tmpDatum);
+	}
+
+	logTimeDeltaHuman(pTimeDelta, pMessage, pDatum)
+	{
+		let tmpMessage = (typeof(pMessage) !== 'undefined') ? pMessage : 'Time Measurement';
+		let tmpDatum = (typeof(pDatum) === 'object') ? pDatum : {};
+
+		let tmpEndTime = +new Date();
+
+		tmpDatum.TimeDelta = {Message: tmpMessage, TimeDeltaMilliseconds: pTimeDelta};
+
+		let tmpMs = parseInt(pTimeDelta%1000);
+		let tmpSeconds = parseInt((pTimeDelta/1000)%60);
+		let tmpMinutes = parseInt((pTimeDelta/(1000*60))%60);
+		let tmpHours = parseInt(pTimeDelta/(1000*60*60));
+
+		tmpMs = (tmpMs < 10) ? "00"+tmpMs : (tmpMs < 100) ? "0"+tmpMs : tmpMs;
+		tmpSeconds = (tmpSeconds < 10) ? "0"+tmpSeconds : tmpSeconds;
+		tmpMinutes = (tmpMinutes < 10) ? "0"+tmpMinutes : tmpMinutes;
+		tmpHours = (tmpHours < 10) ? "0"+tmpHours : tmpHours;
+
+		this.info(`${tmpMessage} (${pTimeDelta}ms --(or)--> ${tmpHours}:${tmpMinutes}:${tmpSeconds}.${tmpMs})`, tmpDatum);
+	}
+
+	logTimeDeltaRelative(pStartTime, pMessage, pDatum)
+	{
+		this.logTimeDelta(this.getTimeDelta(pStartTime), pMessage, pDatum);
+	}
+
+	logTimeDeltaRelativeHuman(pStartTime, pMessage, pDatum)
+	{
+		this.logTimeDeltaHuman(this.getTimeDelta(pStartTime), pMessage, pDatum);
 	}
 }
 

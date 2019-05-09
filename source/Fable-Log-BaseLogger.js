@@ -9,8 +9,11 @@ const libFableUUID = new (require('fable-uuid').FableUUID)();
 
 class BaseLogger
 {
-	constructor(pSettings, pFableLog)
+	constructor(pLogStreamSettings, pFableLog)
 	{
+		// This should not possibly be able to be instantiated without a settings object
+		this._Settings = pLogStreamSettings;
+		
 		// The base logger does nothing but associate a UUID with itself
 		this.loggerUUID = libFableUUID.getUUID();
 	}
