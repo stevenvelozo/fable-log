@@ -1,4 +1,4 @@
-let libFableLog = require('./source/Fable-Log.js');
+let libFableLog = require('../source/Fable-Log.js');
 
 let tmpLog = new libFableLog.FableLog(
 	{
@@ -7,13 +7,9 @@ let tmpLog = new libFableLog.FableLog(
 			{
 				loggertype:'bunyan',
 				streamtype:'stdout',
+				ShowTimeStamps:true,
+				FormattedTimeStamps:true,
 				level:'debug'
-			},
-			{
-				loggertype:'bunyan',
-				level:'debug',
-				streamtype:'file',
-				path:'/tmp/Test-Bunyan.log'
 			}
 		]
 	});

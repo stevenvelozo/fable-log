@@ -69,10 +69,35 @@ suite
 				);
 				test
 				(
+					'empty log streams array',
+					function()
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[]});
+						tmpFableLog.initialize();
+						tmpFableLog.info('Test');
+					}
+				);
+				test
+				(
 					'writing to all log streams',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new();
+						var tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{Context:'Testing Purposes', ShowTimeStamps:true, FormattedTimeStamps:false}]});
+						tmpFableLog.initialize();
+						tmpFableLog.trace('Test of Trace');
+						tmpFableLog.debug('Test of Debug');
+						tmpFableLog.info('Test of Info');
+						tmpFableLog.warn('Test of Warning');
+						tmpFableLog.error('Test of Error');
+						tmpFableLog.fatal('Test of Fatal');
+					}
+				);
+				test
+				(
+					'writing to all log streams with a context',
+					function()
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{Context:'Testing Purposes', ShowTimeStamps:true, FormattedTimeStamps:true}]});
 						tmpFableLog.initialize();
 						tmpFableLog.trace('Test of Trace');
 						tmpFableLog.debug('Test of Debug');
@@ -104,6 +129,21 @@ suite
 					{
 						var tmpFableLog = require('../source/Fable-Log.js').new();
 						//tmpFableLog.initialize();
+						tmpFableLog.trace('Test of Trace');
+						tmpFableLog.debug('Test of Debug');
+						tmpFableLog.info('Test of Info');
+						tmpFableLog.warn('Test of Warning');
+						tmpFableLog.error('Test of Error');
+						tmpFableLog.fatal('Test of Fatal');
+					}
+				);
+				test
+				(
+					'trying to add a bad logger',
+					function()
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{loggertype:'badmojo',StreamType:'process.stderr'}]});
+						tmpFableLog.initialize();
 						tmpFableLog.trace('Test of Trace');
 						tmpFableLog.debug('Test of Debug');
 						tmpFableLog.info('Test of Info');
@@ -255,6 +295,75 @@ suite
 									loggertype:'bunyan',
 									level:'trace',
 									streamtype:'prettystream'
+								}
+							]
+						});
+						tmpFableLog.initialize();
+						tmpFableLog.trace('Trying out pretty streams to Trace...',{Value:"Unlikely",Status:true});
+						tmpFableLog.debug('Trying out pretty streams to Debug...',{Value:"Unlikely",Status:true});
+						tmpFableLog.info('Trying out pretty streams to Info...',{Value:"Unlikely",Status:true});
+						tmpFableLog.warn('Trying out pretty streams to Warning...',{Value:"Unlikely",Status:true});
+						tmpFableLog.error('Trying out pretty streams to Error...',{Value:"Unlikely",Status:true});
+						tmpFableLog.fatal('Trying out pretty streams to Fatal...',{Value:"Unlikely",Status:true});
+					}
+				);
+				test
+				(
+					'other stream output options',
+					function()
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new(
+						{
+							LogStreams:
+							[
+								{
+									loggertype:'bunyan',
+									streamtype:'stderr',
+									level:'trace'
+								},
+								{
+									loggertype:'bunyan',
+									streamtype:'process.stderr',
+									level:'trace'
+								},
+								{
+									loggertype:'bunyan',
+									streamtype:'process.stdout',
+									level:'trace'
+								},
+								{
+									loggertype:'bunyan',
+									level:'trace',
+									streamtype:'prettystream'
+								}
+							]
+						});
+						tmpFableLog.initialize();
+						tmpFableLog.trace('Trying out pretty streams to Trace...',{Value:"Unlikely",Status:true});
+						tmpFableLog.debug('Trying out pretty streams to Debug...',{Value:"Unlikely",Status:true});
+						tmpFableLog.info('Trying out pretty streams to Info...',{Value:"Unlikely",Status:true});
+						tmpFableLog.warn('Trying out pretty streams to Warning...',{Value:"Unlikely",Status:true});
+						tmpFableLog.error('Trying out pretty streams to Error...',{Value:"Unlikely",Status:true});
+						tmpFableLog.fatal('Trying out pretty streams to Fatal...',{Value:"Unlikely",Status:true});
+					}
+				);
+				test
+				(
+					'create a logstash stream',
+					function()
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new(
+						{
+							LogStreams:
+							[
+								{
+									loggertype:'bunyan',
+									level:'trace'
+								},
+								{
+									loggertype:'bunyan',
+									streamtype:'logstash',
+									level:'trace'
 								}
 							]
 						});

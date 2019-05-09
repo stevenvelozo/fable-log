@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node source/Fable-Log.js",
     "coverage": "./node_modules/nyc/bin/nyc.js --reporter=lcov --reporter=text-lcov ./node_modules/mocha/bin/_mocha -- -u tdd -R spec",
-    "test": "./node_modules/mocha/bin/_mocha -u tdd -R spec"
+    "test": "./node_modules/mocha/bin/_mocha -u tdd -R spec",
+    "harness": "node debug/Harness.js"
   },
   "repository": {
     "type": "git",

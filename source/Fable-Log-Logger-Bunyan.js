@@ -72,7 +72,7 @@ class BunyanLogger extends libBaseLogger
 				else
 				{
 					// If no path was specified, just use stdout.
-					pFableLog.logProviders.bunyan_streams.logProviders.bunyan_streams.push({ level:pLogStreamSettings.level, stream:process.stdout });
+					pFableLog.logProviders.bunyan_streams.push({ level:pLogStreamSettings.level, stream:process.stdout });
 				}
 				break;
 		}

@@ -73,13 +73,6 @@ class FableLog
 			case 'fatal':
 				this.logStreamsFatal.push(pLogger);
 				break;
-			default:
-				// By default (invalid string) make it an "info" logger
-				this.logStreamsInfo.push(pLogger);
-				this.logStreamsWarn.push(pLogger);
-				this.logStreamsError.push(pLogger);
-				this.logStreamsFatal.push(pLogger);
-				break;
 		}
 
 		return true;
@@ -143,10 +136,11 @@ class FableLog
 			if (!this._Providers.hasOwnProperty(tmpStreamDefinition.loggertype))
 			{
 				console.log(`Error initializing log stream: bad loggertype in stream definition ${JSON.stringify(tmpStreamDefinition)}`);
-				return false;
 			}
-
-			this.addLogger(new this._Providers[tmpStreamDefinition.loggertype](tmpStreamDefinition, this), tmpStreamDefinition.level);
+			else
+			{
+				this.addLogger(new this._Providers[tmpStreamDefinition.loggertype](tmpStreamDefinition, this), tmpStreamDefinition.level);				
+			}
 		}
 
 		// Now initialize each one.
