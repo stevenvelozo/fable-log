@@ -151,9 +151,8 @@ class FableLog
 	logTime(pMessage, pDatum)
 	{
 		let tmpMessage = (typeof(pMessage) !== 'undefined') ? pMessage : 'Time';
-		let tmpDatum = (typeof(pDatum) === 'object') ? pDatum : {};
 		let tmpTime = new Date();
-		this.info(`${tmpMessage} ${tmpTime}`, tmpDatum);
+		this.info(`${tmpMessage} ${tmpTime} (epoch ${+tmpTime})`, pDatum);
 	}
 
 	// Get a timestamp 
@@ -176,19 +175,14 @@ class FableLog
 
 		let tmpEndTime = +new Date();
 
-		tmpDatum.TimeDelta = {Message: tmpMessage, TimeDeltaMilliseconds: pTimeDelta};
-
-		this.info(`${tmpMessage} (${pTimeDelta}ms)`, tmpDatum);
+		this.info(`${tmpMessage} logged at (epoch ${+tmpEndTime}) took (${pTimeDelta}ms)`, pDatum);
 	}
 
 	logTimeDeltaHuman(pTimeDelta, pMessage, pDatum)
 	{
 		let tmpMessage = (typeof(pMessage) !== 'undefined') ? pMessage : 'Time Measurement';
-		let tmpDatum = (typeof(pDatum) === 'object') ? pDatum : {};
 
 		let tmpEndTime = +new Date();
-
-		tmpDatum.TimeDelta = {Message: tmpMessage, TimeDeltaMilliseconds: pTimeDelta};
 
 		let tmpMs = parseInt(pTimeDelta%1000);
 		let tmpSeconds = parseInt((pTimeDelta/1000)%60);
@@ -200,7 +194,7 @@ class FableLog
 		tmpMinutes = (tmpMinutes < 10) ? "0"+tmpMinutes : tmpMinutes;
 		tmpHours = (tmpHours < 10) ? "0"+tmpHours : tmpHours;
 
-		this.info(`${tmpMessage} (${pTimeDelta}ms --(or)--> ${tmpHours}:${tmpMinutes}:${tmpSeconds}.${tmpMs})`, tmpDatum);
+		this.info(`${tmpMessage} logged at (epoch ${+tmpEndTime}) took (${pTimeDelta}ms) or (${tmpHours}:${tmpMinutes}:${tmpSeconds}.${tmpMs})`, pDatum);
 	}
 
 	logTimeDeltaRelative(pStartTime, pMessage, pDatum)
