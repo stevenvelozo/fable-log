@@ -12,3 +12,9 @@
 * Documentation and examples
 * Added automagic Mongo init (previously you had to explicitly init Mongodbs)
 * Changed UUID to use fable-uuid
+
+#### 2019-05-10: Steven Velozo
+* Changed everything to es6 classes
+* Added a lighter web built version via gulp
+* Added timing methods for easy profiling
+* Providers are abstracted to separate classes (e.g. so bunyan isn't built into the web version)
