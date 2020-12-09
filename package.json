@@ -1,6 +1,6 @@
 {
   "name": "fable-log",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A simple logging wrapper.",
   "main": "source/Fable-Log.js",
   "scripts": {
