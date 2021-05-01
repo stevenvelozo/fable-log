@@ -40,6 +40,8 @@ class FableLog
 		this.logStreamsError = [];
 		this.logStreamsFatal = [];
 
+		this.datumDecorator = (pDatum) => pDatum;
+
 		this.uuid = (typeof(tmpSettings.Product) === 'string') ? tmpSettings.Product : 'Default';
 	}
 
@@ -76,51 +78,69 @@ class FableLog
 		return true;
 	}
 
+	setDatumDecorator(fDatumDecorator)
+	{
+		if (typeof(fDatumDecorator) === 'function')
+		{
+			this.datumDecorator = fDatumDecorator;
+		}
+		else
+		{
+			this.datumDecorator = (pDatum) => pDatum;
+		}
+	}
+
 	trace(pMessage, pDatum)
 	{
+		const tmpDecoratedDatum = this.datumDecorator(pDatum);
 		for (let i = 0; i < this.logStreamsTrace.length; i++)
 		{
-			this.logStreamsTrace[i].trace(pMessage, pDatum);
+			this.logStreamsTrace[i].trace(pMessage, tmpDecoratedDatum);
 		}
 	}
 
 	debug(pMessage, pDatum)
 	{
+		const tmpDecoratedDatum = this.datumDecorator(pDatum);
 		for (let i = 0; i < this.logStreamsDebug.length; i++)
 		{
-			this.logStreamsDebug[i].debug(pMessage, pDatum);
+			this.logStreamsDebug[i].debug(pMessage, tmpDecoratedDatum);
 		}
 	}
 
 	info(pMessage, pDatum)
 	{
+		const tmpDecoratedDatum = this.datumDecorator(pDatum);
 		for (let i = 0; i < this.logStreamsInfo.length; i++)
 		{
-			this.logStreamsInfo[i].info(pMessage, pDatum);
+			this.logStreamsInfo[i].info(pMessage, tmpDecoratedDatum);
 		}
 	}
 
 	warn(pMessage, pDatum)
 	{
+		const tmpDecoratedDatum = this.datumDecorator(pDatum);
 		for (let i = 0; i < this.logStreamsWarn.length; i++)
 		{
-			this.logStreamsWarn[i].warn(pMessage, pDatum);
+			this.logStreamsWarn[i].warn(pMessage, tmpDecoratedDatum);
 		}
 	}
 
 	error(pMessage, pDatum)
 	{
+		const tmpDecoratedDatum = this.datumDecorator(pDatum);
 		for (let i = 0; i < this.logStreamsError.length; i++)
 		{
-			this.logStreamsError[i].error(pMessage, pDatum);
+			this.logStreamsError[i].error(pMessage, tmpDecoratedDatum);
 		}
 	}
 
 	fatal(pMessage, pDatum)
 	{
+		const tmpDecoratedDatum = this.datumDecorator(pDatum);
 		for (let i = 0; i < this.logStreamsFatal.length; i++)
 		{
-			this.logStreamsFatal[i].fatal(pMessage, pDatum);
+			this.logStreamsFatal[i].fatal(pMessage, tmpDecoratedDatum);
 		}
 	}
 
@@ -137,7 +157,7 @@ class FableLog
 			}
 			else
 			{
-				this.addLogger(new this._Providers[tmpStreamDefinition.loggertype](tmpStreamDefinition, this), tmpStreamDefinition.level);				
+				this.addLogger(new this._Providers[tmpStreamDefinition.loggertype](tmpStreamDefinition, this), tmpStreamDefinition.level);
 			}
 		}
 
@@ -155,7 +175,7 @@ class FableLog
 		this.info(`${tmpMessage} ${tmpTime} (epoch ${+tmpTime})`, pDatum);
 	}
 
-	// Get a timestamp 
+	// Get a timestamp
 	getTimeStamp()
 	{
 		return +new Date();
