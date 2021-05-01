@@ -152,6 +152,37 @@ suite
 				);
 				test
 				(
+					'leveraging a custom datum decorator',
+					function()
+					{
+						var tmpFableLog = require('../source/Fable-Log.js').new({ LogStreams: [{ Context:'Testing Purposes' }]});
+						tmpFableLog.setDatumDecorator((pDatum) =>
+						{
+							const decoratedDatum =
+							{
+								Size: 'large',
+								Time: new Date().toISOString(),
+							};
+							if (pDatum && pDatum.LuggageCombination > 0)
+							{
+								decoratedDatum.Insecure = true;
+							}
+							Object.assign(decoratedDatum, pDatum);
+							return decoratedDatum;
+						});
+						tmpFableLog.initialize();
+
+						const tmpDatum = { LuggageCombination: 12345 };
+						tmpFableLog.trace('Test of Trace', tmpDatum);
+						tmpFableLog.debug('Test of Debug', tmpDatum);
+						tmpFableLog.info('Test of Info', tmpDatum);
+						tmpFableLog.warn('Test of Warning', tmpDatum);
+						tmpFableLog.error('Test of Error', tmpDatum);
+						tmpFableLog.fatal('Test of Fatal', tmpDatum);
+					}
+				);
+				test
+				(
 					'writing to all log streams with a context',
 					function()
 					{
