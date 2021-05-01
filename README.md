@@ -3,7 +3,7 @@ Fable Logging
 
 A simple package for enabling consistent logging across the Fable package set.  This wraps the excellent bunyan logging library.
 
-[![Coverage Status](https://coveralls.io/repos/stevenvelozo/fable-log/badge.svg?branch=master)](https://coveralls.io/r/stevenvelozo/fable-log?branch=master) [![Build Status](https://travis-ci.org/stevenvelozo/fable-log.svg?branch=master)](https://travis-ci.org/stevenvelozo/fable-log)
+[![Build Status](https://travis-ci.org/stevenvelozo/fable-log.svg?branch=master)](https://travis-ci.org/stevenvelozo/fable-log)
 
 Why?
 ----
