@@ -4,14 +4,14 @@ let libFS = require('fs');
 let _BasePackageJSON = require(`${__dirname}/../package.json`);
 let _BrowserifyAddonJSON = require(`${__dirname}/browserify_additions_to_package.json`);
 
-libFS.writeFile(`${__dirname}/base_package.json`, JSON.stringify(_BasePackageJSON,null,4),
+libFS.writeFile(`${__dirname}/base_package.json`, JSON.stringify(_BasePackageJSON,null,2),
 	(pBackupError) =>
 	{
-	  if (pBackupError)
-	  {
-		console.log(`Error writing base_package.json backup file -- aborting: ${pBackupError}`);
-		return false;
-	  }
+		if (pBackupError)
+		{
+			console.log(`Error writing base_package.json backup file -- aborting: ${pBackupError}`);
+			return false;
+		}
 
 		libFS.writeFile(`${__dirname}/../package.json`, JSON.stringify(Object.assign({},_BasePackageJSON,_BrowserifyAddonJSON),null,4),
 			(pWriteMergedError) =>
@@ -23,6 +23,6 @@ libFS.writeFile(`${__dirname}/base_package.json`, JSON.stringify(_BasePackageJSO
 				}
 
 				console.log(`--> package.json updated!`);
-				return true;	
+				return true;
 			});
 	});
