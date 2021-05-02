@@ -14,6 +14,8 @@ getDefaultProviders = () =>
 	tmpDefaultProviders.console = require('./Fable-Log-Logger-Console.js');
 	tmpDefaultProviders.bunyan = require('./Fable-Log-Logger-Bunyan.js');
 
+	tmpDefaultProviders.default = tmpDefaultProviders.bunyan;
+
 	return tmpDefaultProviders;
 }
 

@@ -149,7 +149,7 @@ class FableLog
 		// "initialize" each logger as defined in the logging parameters
 		for (let i = 0; i < this._StreamDefinitions.length; i++)
 		{
-			let tmpStreamDefinition = Object.assign({loggertype:'console',streamtype:'console',level:'info'},this._StreamDefinitions[i]);
+			let tmpStreamDefinition = Object.assign({loggertype:'default',streamtype:'console',level:'info'},this._StreamDefinitions[i]);
 
 			if (!this._Providers.hasOwnProperty(tmpStreamDefinition.loggertype))
 			{
