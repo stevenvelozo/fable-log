@@ -1,0 +1,5 @@
+{
+  "browser": {
+    "./source/Fable-Log-DefaultProviders.js": "./source/Fable-Log-DefaultProviders-Browser.js"
+  }
+}
