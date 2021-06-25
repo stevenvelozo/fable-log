@@ -20,6 +20,7 @@ libGulp.task('minified',
 		var tmpBrowserify = libBrowserify(
 		{
 			entries: './source/Fable-Log.js',
+			standalone: 'FableLog',
 			debug: true
 		});
 		//tmpBrowserify.ignore('underscore');
@@ -44,6 +45,7 @@ libGulp.task('debug',
 		var tmpBrowserify = libBrowserify(
 		{
 			entries: './source/Fable-Log.js',
+			standalone: 'FableLog',
 			debug: true
 		});
 
