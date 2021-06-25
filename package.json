@@ -1,6 +1,6 @@
 {
   "name": "fable-log",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "A simple logging wrapper.",
   "main": "source/Fable-Log.js",
   "scripts": {
@@ -18,6 +18,9 @@
   ],
   "author": "Steven Velozo <steven@velozo.com> (http://velozo.com/)",
   "license": "MIT",
+  "browser": {
+    "./source/Fable-Log-DefaultProviders.js": "./source/Fable-Log-DefaultProviders-Browser.js"
+  },
   "bugs": {
     "url": "https://github.com/stevenvelozo/fable-log/issues"
   },
