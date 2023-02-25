@@ -20,7 +20,7 @@ class FableLog
 		let tmpSettings = (typeof(pFableSettings) === 'object') ? pFableSettings : {}
 		this._Settings = tmpSettings;
 
-		this._Providers = require('./Fable-Log-DefaultProviders.js');
+		this._Providers = require('./Fable-Log-DefaultProviders-Node.js');
 
 		this._StreamDefinitions = (tmpSettings.hasOwnProperty('LogStreams')) ? tmpSettings.LogStreams : require('./Fable-Log-DefaultStreams.json');
 

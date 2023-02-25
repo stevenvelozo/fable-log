@@ -12,11 +12,23 @@ class BaseLogger
 	{
 		// This should not possibly be able to be instantiated without a settings object
 		this._Settings = pLogStreamSettings;
-		
+
 		// The base logger does nothing but associate a UUID with itself
 		// We added this as the mechanism for tracking loggers to allow multiple simultaneous streams
 		// to the same provider.
 		this.loggerUUID = this.generateInsecureUUID();
+
+		// Eventually we can use this array to ompute which levels the provider allows.
+		// For now it's just used to precompute some string concatenations.
+		this.levels = (
+			[
+				"trace",
+				"debug",
+				"info",
+				"warn",
+				"error",
+				"fatal"
+			]);
 	}
 
 	// This is meant to generate programmatically insecure UUIDs to identify loggers

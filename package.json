@@ -29,6 +29,9 @@
       "lib/vendor"
     ]
   },
+  "browser": {
+    "./source/Fable-Log-DefaultProviders-Node.js": "./source/Fable-Log-DefaultProviders-Web.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/stevenvelozo/fable-log.git"

@@ -4,26 +4,15 @@ let tmpLog = new libFableLog.FableLog(
 	{
 		LogStreams:
 		[
-								{
-									loggertype:'bunyan',
-									streamtype:'stderr',
-									level:'trace'
-								},
-								{
-									loggertype:'bunyan',
-									streamtype:'process.stderr',
-									level:'trace'
-								},
-								{
-									loggertype:'bunyan',
-									streamtype:'process.stdout',
-									level:'trace'
-								},
-								{
-									loggertype:'bunyan',
-									level:'trace',
-									streamtype:'prettystream'
-								}
+			{
+				//loggertype:'console',
+				loggertype:'simpleflatfile',
+				outputloglinestoconsole: false,
+				showtimestamps: true,
+				formattedtimestamps: true,
+				level:'trace',
+				streamtype:'prettystream'
+			}
 		]
 	});
 
@@ -32,10 +21,18 @@ tmpLog.initialize();
 tmpLog.info('test');
 
 let tmpTimeStamp = tmpLog.getTimeStamp();
+let tmpTimeDelta = 500;
 
-setTimeout(
-	()=>
+for (let i = 0; i < 500000; i++)
+{
+	tmpLog.trace(`Core is at ${i} KELVINS`);
+	if (i % 383)
 	{
-		tmpLog.logTimeDeltaRelative(tmpTimeStamp, 'Test Delta');
-		tmpLog.logTimeDeltaRelativeHuman(tmpTimeStamp);
-	}, 505);
+		setTimeout(
+			()=>
+			{
+				tmpLog.logTimeDeltaRelative(tmpTimeStamp, `Test Delta of ${tmpTimeDelta} ms at ${i} KELVINS...`);
+				tmpLog.logTimeDeltaRelativeHuman(tmpTimeStamp);
+			}, tmpTimeDelta);	
+	}
+}

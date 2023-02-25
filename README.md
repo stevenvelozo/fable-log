@@ -129,7 +129,9 @@ A stream definition object has the following options (none are required, default
     }
 ```
 
-Stream types can also have their own parameters -- for instance Bunyan has a path for the log file.
+Stream types can also have their own parameters -- for instance simpleflatfile and Bunyan have a path for the log file.
+
+(note Bunyan is no longer bundled as a default)
 
 ```
     {
@@ -137,12 +139,6 @@ Stream types can also have their own parameters -- for instance Bunyan has a pat
         streamtype: 'process.stdout',
         level: 'info'
     },
-    {
-        loggertype: 'bunyan',
-        streamtype: 'file',
-        level: 'trace',
-        path: './MyFirstLogFile.log'
-    }
 ```
 
 
