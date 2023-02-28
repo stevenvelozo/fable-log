@@ -379,7 +379,9 @@
         new: autoConstruct,
         FableLog: FableLog
       };
+      module.exports.LogProviderBase = require('./Fable-Log-BaseLogger.js');
     }, {
+      "./Fable-Log-BaseLogger.js": 1,
       "./Fable-Log-DefaultProviders-Node.js": 3,
       "./Fable-Log-DefaultStreams.json": 4
     }]

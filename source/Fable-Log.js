@@ -236,3 +236,4 @@ function autoConstruct(pSettings)
 
 
 module.exports = {new:autoConstruct, FableLog:FableLog};
+module.exports.LogProviderBase = require('./Fable-Log-BaseLogger.js');

@@ -9,10 +9,10 @@ class SimpleFlatFileLogger extends libConsoleLog
 		super(pLogStreamSettings, pFableLog);
 
 		// If a path isn't provided for the logfile, it tries to use the ProductName or Context
-		this.logFileRawPath = (pLogStreamSettings.hasOwnProperty('path')) ? pLogStreamSettings.path : `./${this._ContextMessage}.log`;
+		this.logFileRawPath = (this._Settings.hasOwnProperty('path')) ? this._Settings.path : `./${this._ContextMessage}.log`;
 		this.logFilePath = libPath.normalize(this.logFileRawPath);
 
-		this.logFileStreamOptions = (pLogStreamSettings.hasOwnProperty('fileStreamoptions')) ? pLogStreamSettings.fileStreamOptions : (
+		this.logFileStreamOptions = (this._Settings.hasOwnProperty('fileStreamoptions')) ? this._Settings.fileStreamOptions : (
 			{
 				"flags": "a",
 				"encoding": "utf8"

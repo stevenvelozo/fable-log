@@ -11,7 +11,7 @@ class BaseLogger
 	constructor(pLogStreamSettings, pFableLog)
 	{
 		// This should not possibly be able to be instantiated without a settings object
-		this._Settings = pLogStreamSettings;
+		this._Settings = (typeof(pLogStreamSettings) == 'object') ? pLogStreamSettings : {};
 
 		// The base logger does nothing but associate a UUID with itself
 		// We added this as the mechanism for tracking loggers to allow multiple simultaneous streams
