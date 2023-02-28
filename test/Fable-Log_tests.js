@@ -10,7 +10,7 @@ var Chai = require("chai");
 var Expect = Chai.expect;
 var Assert = Chai.assert;
 
-var libFableLog = require('../source/Fable-Log.js').FableLog;
+var libFableLog = require('../source/Fable-Log.js');
 
 suite
 (
@@ -35,6 +35,16 @@ suite
 					function()
 					{
 						var tmpFableLog = new libFableLog();
+						Expect(tmpFableLog)
+							.to.be.an('object', 'Fable-Log should initialize as an object directly from the require statement.');
+					}
+				);
+				test
+				(
+					'old new object should still work',
+					function()
+					{
+						var tmpFableLog = libFableLog.new();
 						Expect(tmpFableLog)
 							.to.be.an('object', 'Fable-Log should initialize as an object directly from the require statement.');
 					}
