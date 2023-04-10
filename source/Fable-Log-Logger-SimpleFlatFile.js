@@ -24,36 +24,48 @@ class SimpleFlatFileLogger extends libConsoleLog
 
 		this.logLineStrings = [];
 		this.logObjectStrings = [];
+
+		this.defaultWriteCompleteCallback = ()=>{};
+		this.defaultBufferFlushCallback = ()=>{};
 	}
 
-	closeWriter()
+	closeWriter(fCloseComplete)
 	{
+		let tmpCloseComplete = (typeof(fCloseComplete) == 'function') ? fCloseComplete : ()=>{};
 		if (this.fileWriter)
 		{
 			this.fileWriter.end('\n');
+			return this.fileWriter.once('finish', tmpCloseComplete.bind(this));
 		}
 	};
 
-	completeBufferFlushToLogFile()
+	completeBufferFlushToLogFile(fFlushComplete)
 	{
 		this.activelyWriting = false;
+		let tmpFlushComplete = (typeof(fFlushComplete) == 'function') ? fFlushComplete : this.defaultBufferFlushCallback;
 
 		if (this.logLineStrings.length > 0)
 		{
-			this.flushBufferToLogFile();
+			this.flushBufferToLogFile(tmpFlushComplete);
+		}
+		else
+		{
+			return tmpFlushComplete();
 		}
 	}
 
-	flushBufferToLogFile()
+	flushBufferToLogFile(fFlushComplete)
 	{
 		if (!this.activelyWriting)
 		{
+			// Only want to be writing one thing at a time....
+			this.activelyWriting = true;
+
+			let tmpFlushComplete = (typeof(fFlushComplete) == 'function') ? fFlushComplete : this.defaultBufferFlushCallback;
+
 			// Get the current buffer arrays.  These should always have matching number of elements.
 			let tmpLineStrings = this.logLineStrings;
 			let tmpObjectStrings = this.logObjectStrings;
-
-			// Only want to be writing one thing at a time....
-			this.activelyWriting = true;
 
 			// Reset these to be filled while we process this queue...
 			this.logLineStrings = [];
@@ -75,11 +87,11 @@ class SimpleFlatFileLogger extends libConsoleLog
 			if (!this.fileWriter.write(tmpConstructedBufferOutputString, 'utf8'))
 			{
 				// If the streamwriter returns false, we need to wait for it to drain.
-				this.fileWriter.once('drain', this.completeBufferFlushToLogFile.bind(this));
+				this.fileWriter.once('drain', this.completeBufferFlushToLogFile.bind(this, tmpFlushComplete));
 			}
 			else
 			{
-				return this.completeBufferFlushToLogFile();
+				return this.completeBufferFlushToLogFile(tmpFlushComplete);
 			}
 		}
 	}

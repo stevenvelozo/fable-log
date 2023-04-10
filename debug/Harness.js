@@ -33,6 +33,6 @@ for (let i = 0; i < 500000; i++)
 			{
 				tmpLog.logTimeDeltaRelative(tmpTimeStamp, `Test Delta of ${tmpTimeDelta} ms at ${i} KELVINS...`);
 				tmpLog.logTimeDeltaRelativeHuman(tmpTimeStamp);
-			}, tmpTimeDelta);	
+			}, tmpTimeDelta);
 	}
 }

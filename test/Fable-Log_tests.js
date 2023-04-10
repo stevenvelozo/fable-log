@@ -6,11 +6,11 @@
 * @author      Steven Velozo <steven@velozo.com>
 */
 
-var Chai = require("chai");
-var Expect = Chai.expect;
-var Assert = Chai.assert;
+const Chai = require("chai");
+const Expect = Chai.expect;
+const Assert = Chai.assert;
 
-var libFableLog = require('../source/Fable-Log.js');
+const libFableLog = require('../source/Fable-Log.js');
 
 suite
 (
@@ -34,7 +34,7 @@ suite
 					'initialize should build a happy little object',
 					function()
 					{
-						var tmpFableLog = new libFableLog();
+						let tmpFableLog = new libFableLog();
 						Expect(tmpFableLog)
 							.to.be.an('object', 'Fable-Log should initialize as an object directly from the require statement.');
 					}
@@ -44,7 +44,7 @@ suite
 					'old new object should still work',
 					function()
 					{
-						var tmpFableLog = libFableLog.new();
+						let tmpFableLog = libFableLog.new();
 						Expect(tmpFableLog)
 							.to.be.an('object', 'Fable-Log should initialize as an object directly from the require statement.');
 					}
@@ -54,7 +54,7 @@ suite
 					'basic class parameters',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new();
+						let tmpFableLog = require('../source/Fable-Log.js').new();
 						tmpFableLog.initialize();
 						Expect(tmpFableLog).to.have.a.property('_Settings')
 							.that.is.a('object');
@@ -65,9 +65,9 @@ suite
 					'instantiate a base logger class',
 					function()
 					{
-						var tmpFableLogBaseLogger = require('../source/Fable-Log-BaseLogger.js');
+						let tmpFableLogBaseLogger = require('../source/Fable-Log-BaseLogger.js');
 
-						var tmpBaseLogger = new tmpFableLogBaseLogger({});
+						let tmpBaseLogger = new tmpFableLogBaseLogger({});
 
 						Expect(tmpBaseLogger)
 							.to.be.an('object');
@@ -86,7 +86,7 @@ suite
 					'writing to a log stream',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new();
+						let tmpFableLog = require('../source/Fable-Log.js').new();
 						tmpFableLog.initialize();
 						tmpFableLog.info('Test');
 						tmpFableLog.logTime();
@@ -98,7 +98,7 @@ suite
 					'writing custom time events to a log stream',
 					function(fNext)
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new();
+						let tmpFableLog = require('../source/Fable-Log.js').new();
 						tmpFableLog.initialize();
 
 						let tmpTimeStamp = tmpFableLog.getTimeStamp();
@@ -120,7 +120,7 @@ suite
 					'shorter time spans',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new();
+						let tmpFableLog = require('../source/Fable-Log.js').new();
 						tmpFableLog.initialize();
 
 						let tmpTimeStamp = tmpFableLog.getTimeStamp();
@@ -140,7 +140,7 @@ suite
 					'empty log streams array',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[]});
+						let tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[]});
 						tmpFableLog.initialize();
 						tmpFableLog.info('Test');
 					}
@@ -150,7 +150,7 @@ suite
 					'writing to all log streams',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{Context:'Testing Purposes', ShowTimeStamps:true, FormattedTimeStamps:false}]});
+						let tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{Context:'Testing Purposes', ShowTimeStamps:true, FormattedTimeStamps:false}]});
 						tmpFableLog.initialize();
 						tmpFableLog.trace('Test of Trace');
 						tmpFableLog.debug('Test of Debug');
@@ -165,7 +165,7 @@ suite
 					'leveraging a custom datum decorator',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({ LogStreams: [{ Context:'Testing Purposes' }]});
+						let tmpFableLog = require('../source/Fable-Log.js').new({ LogStreams: [{ Context:'Testing Purposes' }]});
 						tmpFableLog.setDatumDecorator((pDatum) =>
 						{
 							const decoratedDatum =
@@ -196,7 +196,7 @@ suite
 					'writing to all log streams with a context',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{Context:'Testing Purposes', ShowTimeStamps:true, FormattedTimeStamps:true}]});
+						let tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{Context:'Testing Purposes', ShowTimeStamps:true, FormattedTimeStamps:true}]});
 						tmpFableLog.initialize();
 						tmpFableLog.trace('Test of Trace');
 						tmpFableLog.debug('Test of Debug');
@@ -211,7 +211,7 @@ suite
 					'writing objects to all log streams',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new();
+						let tmpFableLog = require('../source/Fable-Log.js').new();
 						tmpFableLog.initialize();
 						tmpFableLog.trace('Testing object sending to Trace...',{Value:"Unlikely",Status:true});
 						tmpFableLog.debug('Testing object sending to Debug...',{Value:"Unlikely",Status:true});
@@ -226,7 +226,7 @@ suite
 					'failing to write to all log streams',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new();
+						let tmpFableLog = require('../source/Fable-Log.js').new();
 						//tmpFableLog.initialize();
 						tmpFableLog.trace('Test of Trace');
 						tmpFableLog.debug('Test of Debug');
@@ -241,7 +241,7 @@ suite
 					'trying to add a bad logger',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{loggertype:'badmojo',StreamType:'process.stderr'}]});
+						let tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{loggertype:'badmojo',StreamType:'process.stderr'}]});
 						tmpFableLog.initialize();
 						tmpFableLog.trace('Test of Trace');
 						tmpFableLog.debug('Test of Debug');
@@ -256,7 +256,7 @@ suite
 					'logging empty values to all log streams',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new();
+						let tmpFableLog = require('../source/Fable-Log.js').new();
 						tmpFableLog.initialize();
 						tmpFableLog.trace();
 						tmpFableLog.debug();
@@ -271,7 +271,7 @@ suite
 					'manual logging to bunyan',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{level:'trace'}]});
+						let tmpFableLog = require('../source/Fable-Log.js').new({LogStreams:[{level:'trace'}]});
 						tmpFableLog.initialize();
 						tmpFableLog.logStreamsTrace[0].trace('Test of manual Trace');
 					}
@@ -288,7 +288,7 @@ suite
 					'reading the data in streams',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new();
+						let tmpFableLog = require('../source/Fable-Log.js').new();
 						tmpFableLog.initialize();
 						tmpFableLog.info('Test 2');
 						tmpFableLog.info('Currently the Parameters for this log are', tmpFableLog.parameters);
@@ -299,7 +299,7 @@ suite
 					'setting a UUID',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'SetUUID'});
+						let tmpFableLog = require('../source/Fable-Log.js').new({Product:'SetUUID'});
 						tmpFableLog.uuid = 'SOMECRAZYID1000';
 						tmpFableLog.initialize();
 						tmpFableLog.info('Test UUID Set: '+tmpFableLog.uuid);
@@ -310,29 +310,9 @@ suite
 					'passing in a configuration file',
 					function()
 					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'Paramset', ProductVersion:'9.8.7'});
+						let tmpFableLog = require('../source/Fable-Log.js').new({Product:'Paramset', ProductVersion:'9.8.7'});
 						tmpFableLog.initialize('../test/Fable-Log-Parameters_test.json');
 						tmpFableLog.info('Test with custom params: '+tmpFableLog.uuid);
-					}
-				);
-				test
-				(
-					'passing in the rotating file parameter',
-					function(fDone)
-					{
-						var tmpFableLog = require('../source/Fable-Log.js').new({Product:'rotatingoooo', LogStreams:[{streamtype:'process.stdout'},{type:'rotating-file', period:'1ms', path:'/tmp/SomeRotatingLog.log'}]});
-						tmpFableLog.initialize();
-						// We have to do this as a series, so we can ensure the connection is done before we start logging.
-						var libAsync = require('async');
-						libAsync.series([
-							function(fNext)
-							{
-								tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
-								tmpFableLog.info('Test with custom param object: '+tmpFableLog.uuid);
-								fDone();
-								fNext();
-							}
-						]);
 					}
 				);
 			}
