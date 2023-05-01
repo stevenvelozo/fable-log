@@ -7,7 +7,7 @@
 */
 
 // Return the providers that are available without extensions loaded
-getDefaultProviders = () =>
+var getDefaultProviders = () =>
 {
 	let tmpDefaultProviders = {};
 
