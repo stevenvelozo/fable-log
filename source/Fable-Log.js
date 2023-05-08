@@ -1,23 +1,18 @@
 /**
-* Fable Logging Add-on
-*
-* @license MIT
-*
-* @author Steven Velozo <steven@velozo.com>
-* @module Fable Logger
+* Fable Logging Service
 */
 
-/**
-* Fable Solution Log Wrapper Main Class
-*
-* @class FableLog
-* @constructor
-*/
-class FableLog
+const libFableServiceProviderBase = require('fable-serviceproviderbase').CoreServiceProviderBase;
+
+class FableLog extends libFableServiceProviderBase
 {
-	constructor(pFableSettings, pFable)
+	constructor(pSettings, pServiceHash)
 	{
-		let tmpSettings = (typeof(pFableSettings) === 'object') ? pFableSettings : {}
+		super(pSettings, pServiceHash);
+
+		this.serviceType = 'Logging';
+
+		let tmpSettings = (typeof(pSettings) === 'object') ? pSettings : {}
 		this._Settings = tmpSettings;
 
 		this._Providers = require('./Fable-Log-DefaultProviders-Node.js');

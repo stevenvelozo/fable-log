@@ -46,6 +46,59 @@
   }()({
     1: [function (require, module, exports) {}, {}],
     2: [function (require, module, exports) {
+      /**
+      * Fable Core Pre-initialization Service Base
+      *
+      * For a couple services, we need to be able to instantiate them before the Fable object is fully initialized.
+      * This is a base class for those services.
+      *
+      * @license MIT
+      * @author <steven@velozo.com>
+      */
+
+      class FableCoreServiceProviderBase {
+        constructor(pOptions, pServiceHash) {
+          this.fable = false;
+          this.options = typeof pOptions === 'object' ? pOptions : {};
+          this.serviceType = 'Unknown';
+
+          // The hash will be a non-standard UUID ... the UUID service uses this base class!
+          this.UUID = `CORESVC-${Math.floor(Math.random() * (99999 - 10000) + 10000)}`;
+          this.Hash = typeof pServiceHash === 'string' ? pServiceHash : `${this.UUID}`;
+        }
+        static isFableService = true;
+
+        // After fable is initialized, it would be expected to be wired in as a normal service.
+        connectFable(pFable) {
+          this.fable = pFable;
+          return true;
+        }
+      }
+      module.exports = FableCoreServiceProviderBase;
+    }, {}],
+    3: [function (require, module, exports) {
+      /**
+      * Fable Service Base
+      * @license MIT
+      * @author <steven@velozo.com>
+      */
+
+      class FableServiceProviderBase {
+        constructor(pFable, pOptions, pServiceHash) {
+          this.fable = pFable;
+          this.options = typeof pOptions === 'object' ? pOptions : {};
+          this.serviceType = 'Unknown';
+          this.UUID = pFable.getUUID();
+          this.Hash = typeof pServiceHash === 'string' ? pServiceHash : `${this.UUID}`;
+        }
+        static isFableService = true;
+      }
+      module.exports = FableServiceProviderBase;
+      module.exports.CoreServiceProviderBase = require('./Fable-ServiceProviderBase-Preinit.js');
+    }, {
+      "./Fable-ServiceProviderBase-Preinit.js": 2
+    }],
+    4: [function (require, module, exports) {
       (function (process) {
         (function () {
           // 'path' module extracted from Node.js v8.11.1 (only the posix part)
@@ -514,9 +567,9 @@
         }).call(this);
       }).call(this, require('_process'));
     }, {
-      "_process": 3
+      "_process": 5
     }],
-    3: [function (require, module, exports) {
+    5: [function (require, module, exports) {
       // shim for using process in browser
       var process = module.exports = {};
 
@@ -693,7 +746,7 @@
         return 0;
       };
     }, {}],
-    4: [function (require, module, exports) {
+    6: [function (require, module, exports) {
       /**
       * Base Logger Class
       *
@@ -757,7 +810,7 @@
       }
       module.exports = BaseLogger;
     }, {}],
-    5: [function (require, module, exports) {
+    7: [function (require, module, exports) {
       /**
       * Simple browser shim loader - assign the npm module to a window global automatically
       *
@@ -770,9 +823,9 @@
       }
       module.exports = libNPMModuleWrapper;
     }, {
-      "./Fable-Log.js": 10
+      "./Fable-Log.js": 12
     }],
-    6: [function (require, module, exports) {
+    8: [function (require, module, exports) {
       /**
       * Default Logger Provider Function
       *
@@ -782,7 +835,7 @@
       */
 
       // Return the providers that are available without extensions loaded
-      getDefaultProviders = () => {
+      var getDefaultProviders = () => {
         let tmpDefaultProviders = {};
         tmpDefaultProviders.console = require('./Fable-Log-Logger-Console.js');
         tmpDefaultProviders.default = tmpDefaultProviders.console;
@@ -790,16 +843,16 @@
       };
       module.exports = getDefaultProviders();
     }, {
-      "./Fable-Log-Logger-Console.js": 8
+      "./Fable-Log-Logger-Console.js": 10
     }],
-    7: [function (require, module, exports) {
+    9: [function (require, module, exports) {
       module.exports = [{
         "loggertype": "console",
         "streamtype": "console",
         "level": "trace"
       }];
     }, {}],
-    8: [function (require, module, exports) {
+    10: [function (require, module, exports) {
       let libBaseLogger = require('./Fable-Log-BaseLogger.js');
       class ConsoleLogger extends libBaseLogger {
         constructor(pLogStreamSettings, pFableLog) {
@@ -845,9 +898,9 @@
       }
       module.exports = ConsoleLogger;
     }, {
-      "./Fable-Log-BaseLogger.js": 4
+      "./Fable-Log-BaseLogger.js": 6
     }],
-    9: [function (require, module, exports) {
+    11: [function (require, module, exports) {
       const libConsoleLog = require('./Fable-Log-Logger-Console.js');
       const libFS = require('fs');
       const libPath = require('path');
@@ -933,29 +986,21 @@
       }
       module.exports = SimpleFlatFileLogger;
     }, {
-      "./Fable-Log-Logger-Console.js": 8,
+      "./Fable-Log-Logger-Console.js": 10,
       "fs": 1,
-      "path": 2
+      "path": 4
     }],
-    10: [function (require, module, exports) {
+    12: [function (require, module, exports) {
       /**
-      * Fable Logging Add-on
-      *
-      * @license MIT
-      *
-      * @author Steven Velozo <steven@velozo.com>
-      * @module Fable Logger
+      * Fable Logging Service
       */
 
-      /**
-      * Fable Solution Log Wrapper Main Class
-      *
-      * @class FableLog
-      * @constructor
-      */
-      class FableLog {
-        constructor(pFableSettings, pFable) {
-          let tmpSettings = typeof pFableSettings === 'object' ? pFableSettings : {};
+      const libFableServiceProviderBase = require('fable-serviceproviderbase').CoreServiceProviderBase;
+      class FableLog extends libFableServiceProviderBase {
+        constructor(pSettings, pServiceHash) {
+          super(pSettings, pServiceHash);
+          this.serviceType = 'Logging';
+          let tmpSettings = typeof pSettings === 'object' ? pSettings : {};
           this._Settings = tmpSettings;
           this._Providers = require('./Fable-Log-DefaultProviders-Node.js');
           this._StreamDefinitions = tmpSettings.hasOwnProperty('LogStreams') ? tmpSettings.LogStreams : require('./Fable-Log-DefaultStreams.json');
@@ -1120,11 +1165,12 @@
       module.exports.LogProviderConsole = require('./Fable-Log-Logger-Console.js');
       module.exports.LogProviderConsole = require('./Fable-Log-Logger-SimpleFlatFile.js');
     }, {
-      "./Fable-Log-BaseLogger.js": 4,
-      "./Fable-Log-DefaultProviders-Node.js": 6,
-      "./Fable-Log-DefaultStreams.json": 7,
-      "./Fable-Log-Logger-Console.js": 8,
-      "./Fable-Log-Logger-SimpleFlatFile.js": 9
+      "./Fable-Log-BaseLogger.js": 6,
+      "./Fable-Log-DefaultProviders-Node.js": 8,
+      "./Fable-Log-DefaultStreams.json": 9,
+      "./Fable-Log-Logger-Console.js": 10,
+      "./Fable-Log-Logger-SimpleFlatFile.js": 11,
+      "fable-serviceproviderbase": 3
     }]
-  }, {}, [5])(5);
+  }, {}, [7])(7);
 });
