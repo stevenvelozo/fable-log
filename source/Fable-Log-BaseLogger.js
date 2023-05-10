@@ -1,7 +1,6 @@
 /**
 * Base Logger Class
 *
-* @license MIT
 *
 * @author Steven Velozo <steven@velozo.com>
 */

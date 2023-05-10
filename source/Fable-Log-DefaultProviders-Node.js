@@ -1,7 +1,6 @@
 /**
 * Default Logger Provider Function
 *
-* @license MIT
 *
 * @author Steven Velozo <steven@velozo.com>
 */
