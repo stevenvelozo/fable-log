@@ -37,7 +37,7 @@ class SimpleFlatFileLogger extends libConsoleLog
 			this.fileWriter.end('\n');
 			return this.fileWriter.once('finish', tmpCloseComplete.bind(this));
 		}
-	};
+	}
 
 	completeBufferFlushToLogFile(fFlushComplete)
 	{

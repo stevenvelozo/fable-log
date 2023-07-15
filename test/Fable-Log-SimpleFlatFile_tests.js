@@ -57,7 +57,7 @@ suite
 							(fStageComplete)=>
 							{
 								// Now instantiate the logger
-								tmpFableLog = require('../source/Fable-Log.js').new(
+								tmpFableLog = new libFableLog(
 									{
 										Product:'SimpleFlatFileTest',
 										LogStreams:

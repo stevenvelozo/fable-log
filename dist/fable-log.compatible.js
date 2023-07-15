@@ -1,10 +1,23 @@
 "use strict";
 
+function _get() { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get.bind(); } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(arguments.length < 3 ? target : receiver); } return desc.value; }; } return _get.apply(this, arguments); }
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 (function (f) {
-  if (typeof exports === "object" && typeof module !== "undefined") {
+  if ((typeof exports === "undefined" ? "undefined" : _typeof(exports)) === "object" && typeof module !== "undefined") {
     module.exports = f();
   } else if (typeof define === "function" && define.amd) {
     define([], f);
@@ -59,23 +72,28 @@ function _toPrimitive(input, hint) { if (typeof input !== "object" || input === 
       *
       * @author <steven@velozo.com>
       */
-
-      class FableCoreServiceProviderBase {
-        constructor(pOptions, pServiceHash) {
+      var FableCoreServiceProviderBase = /*#__PURE__*/function () {
+        function FableCoreServiceProviderBase(pOptions, pServiceHash) {
+          _classCallCheck(this, FableCoreServiceProviderBase);
           this.fable = false;
-          this.options = typeof pOptions === 'object' ? pOptions : {};
+          this.options = _typeof(pOptions) === 'object' ? pOptions : {};
           this.serviceType = 'Unknown';
 
           // The hash will be a non-standard UUID ... the UUID service uses this base class!
           this.UUID = "CORESVC-".concat(Math.floor(Math.random() * (99999 - 10000) + 10000));
           this.Hash = typeof pServiceHash === 'string' ? pServiceHash : "".concat(this.UUID);
         }
-        // After fable is initialized, it would be expected to be wired in as a normal service.
-        connectFable(pFable) {
-          this.fable = pFable;
-          return true;
-        }
-      }
+        _createClass(FableCoreServiceProviderBase, [{
+          key: "connectFable",
+          value:
+          // After fable is initialized, it would be expected to be wired in as a normal service.
+          function connectFable(pFable) {
+            this.fable = pFable;
+            return true;
+          }
+        }]);
+        return FableCoreServiceProviderBase;
+      }();
       _defineProperty(FableCoreServiceProviderBase, "isFableService", true);
       module.exports = FableCoreServiceProviderBase;
     }, {}],
@@ -84,25 +102,23 @@ function _toPrimitive(input, hint) { if (typeof input !== "object" || input === 
       * Fable Service Base
       * @author <steven@velozo.com>
       */
-
-      class FableServiceProviderBase {
-        constructor(pFable, pOptions, pServiceHash) {
-          this.fable = pFable;
-          this.options = typeof pOptions === 'object' ? pOptions : typeof pFable === 'object' && !pFable.isFable ? pFable : {};
-          this.serviceType = 'Unknown';
-          if (typeof pFable.getUUID == 'function') {
-            this.UUID = pFable.getUUID();
-          } else {
-            this.UUID = "NoFABLESVC-".concat(Math.floor(Math.random() * (99999 - 10000) + 10000));
-          }
-          this.Hash = typeof pServiceHash === 'string' ? pServiceHash : "".concat(this.UUID);
-
-          // Pull back a few things
-          this.log = this.fable.log;
-          this.servicesMap = this.fable.servicesMap;
-          this.services = this.fable.services;
+      var FableServiceProviderBase = /*#__PURE__*/_createClass(function FableServiceProviderBase(pFable, pOptions, pServiceHash) {
+        _classCallCheck(this, FableServiceProviderBase);
+        this.fable = pFable;
+        this.options = _typeof(pOptions) === 'object' ? pOptions : _typeof(pFable) === 'object' && !pFable.isFable ? pFable : {};
+        this.serviceType = 'Unknown';
+        if (typeof pFable.getUUID == 'function') {
+          this.UUID = pFable.getUUID();
+        } else {
+          this.UUID = "NoFABLESVC-".concat(Math.floor(Math.random() * (99999 - 10000) + 10000));
         }
-      }
+        this.Hash = typeof pServiceHash === 'string' ? pServiceHash : "".concat(this.UUID);
+
+        // Pull back a few things
+        this.log = this.fable.log;
+        this.servicesMap = this.fable.servicesMap;
+        this.services = this.fable.services;
+      });
       _defineProperty(FableServiceProviderBase, "isFableService", true);
       module.exports = FableServiceProviderBase;
       module.exports.CoreServiceProviderBase = require('./Fable-ServiceProviderBase-Preinit.js');
@@ -486,8 +502,8 @@ function _toPrimitive(input, hint) { if (typeof input !== "object" || input === 
               return path.slice(startDot, end);
             },
             format: function format(pathObject) {
-              if (pathObject === null || typeof pathObject !== 'object') {
-                throw new TypeError('The "pathObject" argument must be of type Object. Received type ' + typeof pathObject);
+              if (pathObject === null || _typeof(pathObject) !== 'object') {
+                throw new TypeError('The "pathObject" argument must be of type Object. Received type ' + _typeof(pathObject));
               }
               return _format('/', pathObject);
             },
@@ -765,62 +781,87 @@ function _toPrimitive(input, hint) { if (typeof input !== "object" || input === 
       * @author Steven Velozo <steven@velozo.com>
       */
 
-      const libFableServiceProviderBase = require('fable-serviceproviderbase').CoreServiceProviderBase;
-      class BaseLogger extends libFableServiceProviderBase {
-        constructor(pLogStreamSettings, pLogStreamHash) {
-          super(pLogStreamSettings, pLogStreamHash);
+      var libFableServiceProviderBase = require('fable-serviceproviderbase').CoreServiceProviderBase;
+      var BaseLogger = /*#__PURE__*/function (_libFableServiceProvi) {
+        _inherits(BaseLogger, _libFableServiceProvi);
+        var _super = _createSuper(BaseLogger);
+        function BaseLogger(pLogStreamSettings, pLogStreamHash) {
+          var _this;
+          _classCallCheck(this, BaseLogger);
+          _this = _super.call(this, pLogStreamSettings, pLogStreamHash);
           // This should not possibly be able to be instantiated without a settings object
-          this._Settings = typeof pLogStreamSettings == 'object' ? pLogStreamSettings : {};
-          this.serviceType = 'Logging-Provider';
+          _this._Settings = _typeof(pLogStreamSettings) == 'object' ? pLogStreamSettings : {};
+          _this.serviceType = 'Logging-Provider';
 
           // The base logger does nothing but associate a UUID with itself
           // We added this as the mechanism for tracking loggers to allow multiple simultaneous streams
           // to the same provider.
-          this.loggerUUID = this.generateInsecureUUID();
+          _this.loggerUUID = _this.generateInsecureUUID();
 
           // Eventually we can use this array to ompute which levels the provider allows.
           // For now it's just used to precompute some string concatenations.
-          this.levels = ["trace", "debug", "info", "warn", "error", "fatal"];
+          _this.levels = ["trace", "debug", "info", "warn", "error", "fatal"];
+          return _this;
         }
 
         // This is meant to generate programmatically insecure UUIDs to identify loggers
-        generateInsecureUUID() {
-          let tmpDate = new Date().getTime();
-          let tmpUUID = 'LOGSTREAM-xxxxxx-yxxxxx'.replace(/[xy]/g, pCharacter => {
-            // Funny algorithm from w3resource that is twister-ish without the deep math and security
-            // ..but good enough for unique log stream identifiers
-            let tmpRandomData = (tmpDate + Math.random() * 16) % 16 | 0;
-            tmpDate = Math.floor(tmpDate / 16);
-            return (pCharacter == 'x' ? tmpRandomData : tmpRandomData & 0x3 | 0x8).toString(16);
-          });
-          return tmpUUID;
-        }
-        initialize() {
-          // No operation.
-        }
-        trace(pLogText, pLogObject) {
-          this.write("trace", pLogText, pLogObject);
-        }
-        debug(pLogText, pLogObject) {
-          this.write("debug", pLogText, pLogObject);
-        }
-        info(pLogText, pLogObject) {
-          this.write("info", pLogText, pLogObject);
-        }
-        warn(pLogText, pLogObject) {
-          this.write("warn", pLogText, pLogObject);
-        }
-        error(pLogText, pLogObject) {
-          this.write("error", pLogText, pLogObject);
-        }
-        fatal(pLogText, pLogObject) {
-          this.write("fatal", pLogText, pLogObject);
-        }
-        write(pLogLevel, pLogText, pLogObject) {
-          // The base logger does nothing.
-          return true;
-        }
-      }
+        _createClass(BaseLogger, [{
+          key: "generateInsecureUUID",
+          value: function generateInsecureUUID() {
+            var tmpDate = new Date().getTime();
+            var tmpUUID = 'LOGSTREAM-xxxxxx-yxxxxx'.replace(/[xy]/g, function (pCharacter) {
+              // Funny algorithm from w3resource that is twister-ish without the deep math and security
+              // ..but good enough for unique log stream identifiers
+              var tmpRandomData = (tmpDate + Math.random() * 16) % 16 | 0;
+              tmpDate = Math.floor(tmpDate / 16);
+              return (pCharacter == 'x' ? tmpRandomData : tmpRandomData & 0x3 | 0x8).toString(16);
+            });
+            return tmpUUID;
+          }
+        }, {
+          key: "initialize",
+          value: function initialize() {
+            // No operation.
+          }
+        }, {
+          key: "trace",
+          value: function trace(pLogText, pLogObject) {
+            this.write("trace", pLogText, pLogObject);
+          }
+        }, {
+          key: "debug",
+          value: function debug(pLogText, pLogObject) {
+            this.write("debug", pLogText, pLogObject);
+          }
+        }, {
+          key: "info",
+          value: function info(pLogText, pLogObject) {
+            this.write("info", pLogText, pLogObject);
+          }
+        }, {
+          key: "warn",
+          value: function warn(pLogText, pLogObject) {
+            this.write("warn", pLogText, pLogObject);
+          }
+        }, {
+          key: "error",
+          value: function error(pLogText, pLogObject) {
+            this.write("error", pLogText, pLogObject);
+          }
+        }, {
+          key: "fatal",
+          value: function fatal(pLogText, pLogObject) {
+            this.write("fatal", pLogText, pLogObject);
+          }
+        }, {
+          key: "write",
+          value: function write(pLogLevel, pLogText, pLogObject) {
+            // The base logger does nothing.
+            return true;
+          }
+        }]);
+        return BaseLogger;
+      }(libFableServiceProviderBase);
       module.exports = BaseLogger;
     }, {
       "fable-serviceproviderbase": 3
@@ -834,10 +875,10 @@ function _toPrimitive(input, hint) { if (typeof input !== "object" || input === 
       */
 
       // Return the providers that are available without extensions loaded
-      var getDefaultProviders = () => {
-        let tmpDefaultProviders = {};
+      var getDefaultProviders = function getDefaultProviders() {
+        var tmpDefaultProviders = {};
         tmpDefaultProviders.console = require('./Fable-Log-Logger-Console.js');
-        tmpDefaultProviders.default = tmpDefaultProviders.console;
+        tmpDefaultProviders["default"] = tmpDefaultProviders.console;
         return tmpDefaultProviders;
       };
       module.exports = getDefaultProviders();
@@ -852,137 +893,161 @@ function _toPrimitive(input, hint) { if (typeof input !== "object" || input === 
       }];
     }, {}],
     9: [function (require, module, exports) {
-      let libBaseLogger = require('./Fable-Log-BaseLogger.js');
-      class ConsoleLogger extends libBaseLogger {
-        constructor(pLogStreamSettings, pFableLog) {
-          super(pLogStreamSettings);
-          this._ShowTimeStamps = this._Settings.hasOwnProperty('showtimestamps') ? this._Settings.showtimestamps == true : true;
-          this._FormattedTimeStamps = this._Settings.hasOwnProperty('formattedtimestamps') ? this._Settings.formattedtimestamps == true : true;
-          this._ContextMessage = this._Settings.hasOwnProperty('Context') ? "(".concat(this._Settings.Context, ")") : pFableLog._Settings.hasOwnProperty('Product') ? "(".concat(pFableLog._Settings.Product, ")") : 'Unnamed_Log_Context';
+      var libBaseLogger = require('./Fable-Log-BaseLogger.js');
+      var ConsoleLogger = /*#__PURE__*/function (_libBaseLogger) {
+        _inherits(ConsoleLogger, _libBaseLogger);
+        var _super2 = _createSuper(ConsoleLogger);
+        function ConsoleLogger(pLogStreamSettings, pFableLog) {
+          var _this2;
+          _classCallCheck(this, ConsoleLogger);
+          _this2 = _super2.call(this, pLogStreamSettings);
+          _this2._ShowTimeStamps = _this2._Settings.hasOwnProperty('showtimestamps') ? _this2._Settings.showtimestamps == true : true;
+          _this2._FormattedTimeStamps = _this2._Settings.hasOwnProperty('formattedtimestamps') ? _this2._Settings.formattedtimestamps == true : true;
+          _this2._ContextMessage = _this2._Settings.hasOwnProperty('Context') ? "(".concat(_this2._Settings.Context, ")") : pFableLog._Settings.hasOwnProperty('Product') ? "(".concat(pFableLog._Settings.Product, ")") : 'Unnamed_Log_Context';
 
           // Allow the user to decide what gets output to the console
-          this._OutputLogLinesToConsole = this._Settings.hasOwnProperty('outputloglinestoconsole') ? this._Settings.outputloglinestoconsole : true;
-          this._OutputObjectsToConsole = this._Settings.hasOwnProperty('outputobjectstoconsole') ? this._Settings.outputobjectstoconsole : true;
+          _this2._OutputLogLinesToConsole = _this2._Settings.hasOwnProperty('outputloglinestoconsole') ? _this2._Settings.outputloglinestoconsole : true;
+          _this2._OutputObjectsToConsole = _this2._Settings.hasOwnProperty('outputobjectstoconsole') ? _this2._Settings.outputobjectstoconsole : true;
 
           // Precompute the prefix for each level
-          this.prefixCache = {};
-          for (let i = 0; i <= this.levels.length; i++) {
-            this.prefixCache[this.levels[i]] = "[".concat(this.levels[i], "] ").concat(this._ContextMessage, ": ");
-            if (this._ShowTimeStamps) {
+          _this2.prefixCache = {};
+          for (var i = 0; i <= _this2.levels.length; i++) {
+            _this2.prefixCache[_this2.levels[i]] = "[".concat(_this2.levels[i], "] ").concat(_this2._ContextMessage, ": ");
+            if (_this2._ShowTimeStamps) {
               // If there is a timestamp we need a to prepend space before the prefixcache string, since the timestamp comes first
-              this.prefixCache[this.levels[i]] = ' ' + this.prefixCache[this.levels[i]];
+              _this2.prefixCache[_this2.levels[i]] = ' ' + _this2.prefixCache[_this2.levels[i]];
             }
           }
+          return _this2;
         }
-        write(pLevel, pLogText, pObject) {
-          let tmpTimeStamp = '';
-          if (this._ShowTimeStamps && this._FormattedTimeStamps) {
-            tmpTimeStamp = new Date().toISOString();
-          } else if (this._ShowTimeStamps) {
-            tmpTimeStamp = +new Date();
-          }
-          let tmpLogLine = "".concat(tmpTimeStamp).concat(this.prefixCache[pLevel]).concat(pLogText);
-          if (this._OutputLogLinesToConsole) {
-            console.log(tmpLogLine);
-          }
+        _createClass(ConsoleLogger, [{
+          key: "write",
+          value: function write(pLevel, pLogText, pObject) {
+            var tmpTimeStamp = '';
+            if (this._ShowTimeStamps && this._FormattedTimeStamps) {
+              tmpTimeStamp = new Date().toISOString();
+            } else if (this._ShowTimeStamps) {
+              tmpTimeStamp = +new Date();
+            }
+            var tmpLogLine = "".concat(tmpTimeStamp).concat(this.prefixCache[pLevel]).concat(pLogText);
+            if (this._OutputLogLinesToConsole) {
+              console.log(tmpLogLine);
+            }
 
-          // Write out the object on a separate line if it is passed in
-          if (this._OutputObjectsToConsole && typeof pObject !== 'undefined') {
-            console.log(JSON.stringify(pObject, null, 2));
-          }
+            // Write out the object on a separate line if it is passed in
+            if (this._OutputObjectsToConsole && typeof pObject !== 'undefined') {
+              console.log(JSON.stringify(pObject, null, 2));
+            }
 
-          // Provide an easy way to be overridden and be consistent
-          return tmpLogLine;
-        }
-      }
+            // Provide an easy way to be overridden and be consistent
+            return tmpLogLine;
+          }
+        }]);
+        return ConsoleLogger;
+      }(libBaseLogger);
       module.exports = ConsoleLogger;
     }, {
       "./Fable-Log-BaseLogger.js": 6
     }],
     10: [function (require, module, exports) {
-      const libConsoleLog = require('./Fable-Log-Logger-Console.js');
-      const libFS = require('fs');
-      const libPath = require('path');
-      class SimpleFlatFileLogger extends libConsoleLog {
-        constructor(pLogStreamSettings, pFableLog) {
-          super(pLogStreamSettings, pFableLog);
+      var libConsoleLog = require('./Fable-Log-Logger-Console.js');
+      var libFS = require('fs');
+      var libPath = require('path');
+      var SimpleFlatFileLogger = /*#__PURE__*/function (_libConsoleLog) {
+        _inherits(SimpleFlatFileLogger, _libConsoleLog);
+        var _super3 = _createSuper(SimpleFlatFileLogger);
+        function SimpleFlatFileLogger(pLogStreamSettings, pFableLog) {
+          var _this3;
+          _classCallCheck(this, SimpleFlatFileLogger);
+          _this3 = _super3.call(this, pLogStreamSettings, pFableLog);
 
           // If a path isn't provided for the logfile, it tries to use the ProductName or Context
-          this.logFileRawPath = this._Settings.hasOwnProperty('path') ? this._Settings.path : "./".concat(this._ContextMessage, ".log");
-          this.logFilePath = libPath.normalize(this.logFileRawPath);
-          this.logFileStreamOptions = this._Settings.hasOwnProperty('fileStreamoptions') ? this._Settings.fileStreamOptions : {
+          _this3.logFileRawPath = _this3._Settings.hasOwnProperty('path') ? _this3._Settings.path : "./".concat(_this3._ContextMessage, ".log");
+          _this3.logFilePath = libPath.normalize(_this3.logFileRawPath);
+          _this3.logFileStreamOptions = _this3._Settings.hasOwnProperty('fileStreamoptions') ? _this3._Settings.fileStreamOptions : {
             "flags": "a",
             "encoding": "utf8"
           };
-          this.fileWriter = libFS.createWriteStream(this.logFilePath, this.logFileStreamOptions);
-          this.activelyWriting = false;
-          this.logLineStrings = [];
-          this.logObjectStrings = [];
-          this.defaultWriteCompleteCallback = () => {};
-          this.defaultBufferFlushCallback = () => {};
+          _this3.fileWriter = libFS.createWriteStream(_this3.logFilePath, _this3.logFileStreamOptions);
+          _this3.activelyWriting = false;
+          _this3.logLineStrings = [];
+          _this3.logObjectStrings = [];
+          _this3.defaultWriteCompleteCallback = function () {};
+          _this3.defaultBufferFlushCallback = function () {};
+          return _this3;
         }
-        closeWriter(fCloseComplete) {
-          let tmpCloseComplete = typeof fCloseComplete == 'function' ? fCloseComplete : () => {};
-          if (this.fileWriter) {
-            this.fileWriter.end('\n');
-            return this.fileWriter.once('finish', tmpCloseComplete.bind(this));
+        _createClass(SimpleFlatFileLogger, [{
+          key: "closeWriter",
+          value: function closeWriter(fCloseComplete) {
+            var tmpCloseComplete = typeof fCloseComplete == 'function' ? fCloseComplete : function () {};
+            if (this.fileWriter) {
+              this.fileWriter.end('\n');
+              return this.fileWriter.once('finish', tmpCloseComplete.bind(this));
+            }
           }
-        }
-        completeBufferFlushToLogFile(fFlushComplete) {
-          this.activelyWriting = false;
-          let tmpFlushComplete = typeof fFlushComplete == 'function' ? fFlushComplete : this.defaultBufferFlushCallback;
-          if (this.logLineStrings.length > 0) {
-            this.flushBufferToLogFile(tmpFlushComplete);
-          } else {
-            return tmpFlushComplete();
+        }, {
+          key: "completeBufferFlushToLogFile",
+          value: function completeBufferFlushToLogFile(fFlushComplete) {
+            this.activelyWriting = false;
+            var tmpFlushComplete = typeof fFlushComplete == 'function' ? fFlushComplete : this.defaultBufferFlushCallback;
+            if (this.logLineStrings.length > 0) {
+              this.flushBufferToLogFile(tmpFlushComplete);
+            } else {
+              return tmpFlushComplete();
+            }
           }
-        }
-        flushBufferToLogFile(fFlushComplete) {
-          if (!this.activelyWriting) {
-            // Only want to be writing one thing at a time....
-            this.activelyWriting = true;
-            let tmpFlushComplete = typeof fFlushComplete == 'function' ? fFlushComplete : this.defaultBufferFlushCallback;
+        }, {
+          key: "flushBufferToLogFile",
+          value: function flushBufferToLogFile(fFlushComplete) {
+            if (!this.activelyWriting) {
+              // Only want to be writing one thing at a time....
+              this.activelyWriting = true;
+              var tmpFlushComplete = typeof fFlushComplete == 'function' ? fFlushComplete : this.defaultBufferFlushCallback;
 
-            // Get the current buffer arrays.  These should always have matching number of elements.
-            let tmpLineStrings = this.logLineStrings;
-            let tmpObjectStrings = this.logObjectStrings;
+              // Get the current buffer arrays.  These should always have matching number of elements.
+              var tmpLineStrings = this.logLineStrings;
+              var tmpObjectStrings = this.logObjectStrings;
 
-            // Reset these to be filled while we process this queue...
-            this.logLineStrings = [];
-            this.logObjectStrings = [];
+              // Reset these to be filled while we process this queue...
+              this.logLineStrings = [];
+              this.logObjectStrings = [];
 
-            // This is where we will put each line before writing it to the file...
-            let tmpConstructedBufferOutputString = '';
-            for (let i = 0; i < tmpLineStrings.length; i++) {
-              // TODO: Windows Newline?   ....... yo no se!
-              tmpConstructedBufferOutputString += "".concat(tmpLineStrings[i], "\n");
-              if (tmpObjectStrings[i] !== false) {
-                tmpConstructedBufferOutputString += "".concat(tmpObjectStrings[i], "\n");
+              // This is where we will put each line before writing it to the file...
+              var tmpConstructedBufferOutputString = '';
+              for (var i = 0; i < tmpLineStrings.length; i++) {
+                // TODO: Windows Newline?   ....... yo no se!
+                tmpConstructedBufferOutputString += "".concat(tmpLineStrings[i], "\n");
+                if (tmpObjectStrings[i] !== false) {
+                  tmpConstructedBufferOutputString += "".concat(tmpObjectStrings[i], "\n");
+                }
+              }
+              if (!this.fileWriter.write(tmpConstructedBufferOutputString, 'utf8')) {
+                // If the streamwriter returns false, we need to wait for it to drain.
+                this.fileWriter.once('drain', this.completeBufferFlushToLogFile.bind(this, tmpFlushComplete));
+              } else {
+                return this.completeBufferFlushToLogFile(tmpFlushComplete);
               }
             }
-            if (!this.fileWriter.write(tmpConstructedBufferOutputString, 'utf8')) {
-              // If the streamwriter returns false, we need to wait for it to drain.
-              this.fileWriter.once('drain', this.completeBufferFlushToLogFile.bind(this, tmpFlushComplete));
+          }
+        }, {
+          key: "write",
+          value: function write(pLevel, pLogText, pObject) {
+            var tmpLogLine = _get(_getPrototypeOf(SimpleFlatFileLogger.prototype), "write", this).call(this, pLevel, pLogText, pObject);
+
+            // Use a very simple array as the write buffer
+            this.logLineStrings.push(tmpLogLine);
+
+            // Write out the object on a separate line if it is passed in
+            if (typeof pObject !== 'undefined') {
+              this.logObjectStrings.push(JSON.stringify(pObject, null, 4));
             } else {
-              return this.completeBufferFlushToLogFile(tmpFlushComplete);
+              this.logObjectStrings.push(false);
             }
+            this.flushBufferToLogFile();
           }
-        }
-        write(pLevel, pLogText, pObject) {
-          let tmpLogLine = super.write(pLevel, pLogText, pObject);
-
-          // Use a very simple array as the write buffer
-          this.logLineStrings.push(tmpLogLine);
-
-          // Write out the object on a separate line if it is passed in
-          if (typeof pObject !== 'undefined') {
-            this.logObjectStrings.push(JSON.stringify(pObject, null, 4));
-          } else {
-            this.logObjectStrings.push(false);
-          }
-          this.flushBufferToLogFile();
-        }
-      }
+        }]);
+        return SimpleFlatFileLogger;
+      }(libConsoleLog);
       module.exports = SimpleFlatFileLogger;
     }, {
       "./Fable-Log-Logger-Console.js": 9,
@@ -994,165 +1059,208 @@ function _toPrimitive(input, hint) { if (typeof input !== "object" || input === 
       * Fable Logging Service
       */
 
-      const libFableServiceProviderBase = require('fable-serviceproviderbase').CoreServiceProviderBase;
-      class FableLog extends libFableServiceProviderBase {
-        constructor(pSettings, pServiceHash) {
-          super(pSettings, pServiceHash);
-          this.serviceType = 'Logging';
-          let tmpSettings = typeof pSettings === 'object' ? pSettings : {};
-          this._Settings = tmpSettings;
-          this._Providers = require('./Fable-Log-DefaultProviders-Node.js');
-          this._StreamDefinitions = tmpSettings.hasOwnProperty('LogStreams') ? tmpSettings.LogStreams : require('./Fable-Log-DefaultStreams.json');
-          this.logStreams = [];
+      var libFableServiceProviderBase = require('fable-serviceproviderbase').CoreServiceProviderBase;
+      var FableLog = /*#__PURE__*/function (_libFableServiceProvi2) {
+        _inherits(FableLog, _libFableServiceProvi2);
+        var _super4 = _createSuper(FableLog);
+        function FableLog(pSettings, pServiceHash) {
+          var _this4;
+          _classCallCheck(this, FableLog);
+          _this4 = _super4.call(this, pSettings, pServiceHash);
+          _this4.serviceType = 'Logging';
+          var tmpSettings = _typeof(pSettings) === 'object' ? pSettings : {};
+          _this4._Settings = tmpSettings;
+          _this4._Providers = require('./Fable-Log-DefaultProviders-Node.js');
+          _this4._StreamDefinitions = tmpSettings.hasOwnProperty('LogStreams') ? tmpSettings.LogStreams : require('./Fable-Log-DefaultStreams.json');
+          _this4.logStreams = [];
 
           // This object gets decorated for one-time instantiated providers that
           //  have multiple outputs, such as bunyan.
-          this.logProviders = {};
+          _this4.logProviders = {};
 
           // A hash list of the GUIDs for each log stream, so they can't be added to the set more than one time
-          this.activeLogStreams = {};
-          this.logStreamsTrace = [];
-          this.logStreamsDebug = [];
-          this.logStreamsInfo = [];
-          this.logStreamsWarn = [];
-          this.logStreamsError = [];
-          this.logStreamsFatal = [];
-          this.datumDecorator = pDatum => pDatum;
-          this.uuid = typeof tmpSettings.Product === 'string' ? tmpSettings.Product : 'Default';
+          _this4.activeLogStreams = {};
+          _this4.logStreamsTrace = [];
+          _this4.logStreamsDebug = [];
+          _this4.logStreamsInfo = [];
+          _this4.logStreamsWarn = [];
+          _this4.logStreamsError = [];
+          _this4.logStreamsFatal = [];
+          _this4.datumDecorator = function (pDatum) {
+            return pDatum;
+          };
+          _this4.uuid = typeof tmpSettings.Product === 'string' ? tmpSettings.Product : 'Default';
+          return _this4;
         }
-        addLogger(pLogger, pLevel) {
-          // Bail out if we've already created one.
-          if (this.activeLogStreams.hasOwnProperty(pLogger.loggerUUID)) {
-            return false;
-          }
+        _createClass(FableLog, [{
+          key: "addLogger",
+          value: function addLogger(pLogger, pLevel) {
+            // Bail out if we've already created one.
+            if (this.activeLogStreams.hasOwnProperty(pLogger.loggerUUID)) {
+              return false;
+            }
 
-          // Add it to the streams and to the mutex
-          this.logStreams.push(pLogger);
-          this.activeLogStreams[pLogger.loggerUUID] = true;
+            // Add it to the streams and to the mutex
+            this.logStreams.push(pLogger);
+            this.activeLogStreams[pLogger.loggerUUID] = true;
 
-          // Make sure a kosher level was passed in
-          switch (pLevel) {
-            case 'trace':
-              this.logStreamsTrace.push(pLogger);
-            case 'debug':
-              this.logStreamsDebug.push(pLogger);
-            case 'info':
-              this.logStreamsInfo.push(pLogger);
-            case 'warn':
-              this.logStreamsWarn.push(pLogger);
-            case 'error':
-              this.logStreamsError.push(pLogger);
-            case 'fatal':
-              this.logStreamsFatal.push(pLogger);
-              break;
+            // Make sure a kosher level was passed in
+            switch (pLevel) {
+              case 'trace':
+                this.logStreamsTrace.push(pLogger);
+              case 'debug':
+                this.logStreamsDebug.push(pLogger);
+              case 'info':
+                this.logStreamsInfo.push(pLogger);
+              case 'warn':
+                this.logStreamsWarn.push(pLogger);
+              case 'error':
+                this.logStreamsError.push(pLogger);
+              case 'fatal':
+                this.logStreamsFatal.push(pLogger);
+                break;
+            }
+            return true;
           }
-          return true;
-        }
-        setDatumDecorator(fDatumDecorator) {
-          if (typeof fDatumDecorator === 'function') {
-            this.datumDecorator = fDatumDecorator;
-          } else {
-            this.datumDecorator = pDatum => pDatum;
-          }
-        }
-        trace(pMessage, pDatum) {
-          const tmpDecoratedDatum = this.datumDecorator(pDatum);
-          for (let i = 0; i < this.logStreamsTrace.length; i++) {
-            this.logStreamsTrace[i].trace(pMessage, tmpDecoratedDatum);
-          }
-        }
-        debug(pMessage, pDatum) {
-          const tmpDecoratedDatum = this.datumDecorator(pDatum);
-          for (let i = 0; i < this.logStreamsDebug.length; i++) {
-            this.logStreamsDebug[i].debug(pMessage, tmpDecoratedDatum);
-          }
-        }
-        info(pMessage, pDatum) {
-          const tmpDecoratedDatum = this.datumDecorator(pDatum);
-          for (let i = 0; i < this.logStreamsInfo.length; i++) {
-            this.logStreamsInfo[i].info(pMessage, tmpDecoratedDatum);
-          }
-        }
-        warn(pMessage, pDatum) {
-          const tmpDecoratedDatum = this.datumDecorator(pDatum);
-          for (let i = 0; i < this.logStreamsWarn.length; i++) {
-            this.logStreamsWarn[i].warn(pMessage, tmpDecoratedDatum);
-          }
-        }
-        error(pMessage, pDatum) {
-          const tmpDecoratedDatum = this.datumDecorator(pDatum);
-          for (let i = 0; i < this.logStreamsError.length; i++) {
-            this.logStreamsError[i].error(pMessage, tmpDecoratedDatum);
-          }
-        }
-        fatal(pMessage, pDatum) {
-          const tmpDecoratedDatum = this.datumDecorator(pDatum);
-          for (let i = 0; i < this.logStreamsFatal.length; i++) {
-            this.logStreamsFatal[i].fatal(pMessage, tmpDecoratedDatum);
-          }
-        }
-        initialize() {
-          // "initialize" each logger as defined in the logging parameters
-          for (let i = 0; i < this._StreamDefinitions.length; i++) {
-            let tmpStreamDefinition = Object.assign({
-              loggertype: 'default',
-              streamtype: 'console',
-              level: 'info'
-            }, this._StreamDefinitions[i]);
-            if (!this._Providers.hasOwnProperty(tmpStreamDefinition.loggertype)) {
-              console.log("Error initializing log stream: bad loggertype in stream definition ".concat(JSON.stringify(tmpStreamDefinition)));
+        }, {
+          key: "setDatumDecorator",
+          value: function setDatumDecorator(fDatumDecorator) {
+            if (typeof fDatumDecorator === 'function') {
+              this.datumDecorator = fDatumDecorator;
             } else {
-              this.addLogger(new this._Providers[tmpStreamDefinition.loggertype](tmpStreamDefinition, this), tmpStreamDefinition.level);
+              this.datumDecorator = function (pDatum) {
+                return pDatum;
+              };
             }
           }
-
-          // Now initialize each one.
-          for (let i = 0; i < this.logStreams.length; i++) {
-            this.logStreams[i].initialize();
+        }, {
+          key: "trace",
+          value: function trace(pMessage, pDatum) {
+            var tmpDecoratedDatum = this.datumDecorator(pDatum);
+            for (var i = 0; i < this.logStreamsTrace.length; i++) {
+              this.logStreamsTrace[i].trace(pMessage, tmpDecoratedDatum);
+            }
           }
-        }
-        logTime(pMessage, pDatum) {
-          let tmpMessage = typeof pMessage !== 'undefined' ? pMessage : 'Time';
-          let tmpTime = new Date();
-          this.info("".concat(tmpMessage, " ").concat(tmpTime, " (epoch ").concat(+tmpTime, ")"), pDatum);
-        }
+        }, {
+          key: "debug",
+          value: function debug(pMessage, pDatum) {
+            var tmpDecoratedDatum = this.datumDecorator(pDatum);
+            for (var i = 0; i < this.logStreamsDebug.length; i++) {
+              this.logStreamsDebug[i].debug(pMessage, tmpDecoratedDatum);
+            }
+          }
+        }, {
+          key: "info",
+          value: function info(pMessage, pDatum) {
+            var tmpDecoratedDatum = this.datumDecorator(pDatum);
+            for (var i = 0; i < this.logStreamsInfo.length; i++) {
+              this.logStreamsInfo[i].info(pMessage, tmpDecoratedDatum);
+            }
+          }
+        }, {
+          key: "warn",
+          value: function warn(pMessage, pDatum) {
+            var tmpDecoratedDatum = this.datumDecorator(pDatum);
+            for (var i = 0; i < this.logStreamsWarn.length; i++) {
+              this.logStreamsWarn[i].warn(pMessage, tmpDecoratedDatum);
+            }
+          }
+        }, {
+          key: "error",
+          value: function error(pMessage, pDatum) {
+            var tmpDecoratedDatum = this.datumDecorator(pDatum);
+            for (var i = 0; i < this.logStreamsError.length; i++) {
+              this.logStreamsError[i].error(pMessage, tmpDecoratedDatum);
+            }
+          }
+        }, {
+          key: "fatal",
+          value: function fatal(pMessage, pDatum) {
+            var tmpDecoratedDatum = this.datumDecorator(pDatum);
+            for (var i = 0; i < this.logStreamsFatal.length; i++) {
+              this.logStreamsFatal[i].fatal(pMessage, tmpDecoratedDatum);
+            }
+          }
+        }, {
+          key: "initialize",
+          value: function initialize() {
+            // "initialize" each logger as defined in the logging parameters
+            for (var i = 0; i < this._StreamDefinitions.length; i++) {
+              var tmpStreamDefinition = Object.assign({
+                loggertype: 'default',
+                streamtype: 'console',
+                level: 'info'
+              }, this._StreamDefinitions[i]);
+              if (!this._Providers.hasOwnProperty(tmpStreamDefinition.loggertype)) {
+                console.log("Error initializing log stream: bad loggertype in stream definition ".concat(JSON.stringify(tmpStreamDefinition)));
+              } else {
+                this.addLogger(new this._Providers[tmpStreamDefinition.loggertype](tmpStreamDefinition, this), tmpStreamDefinition.level);
+              }
+            }
 
-        // Get a timestamp
-        getTimeStamp() {
-          return +new Date();
-        }
-        getTimeDelta(pTimeStamp) {
-          let tmpEndTime = +new Date();
-          return tmpEndTime - pTimeStamp;
-        }
+            // Now initialize each one.
+            for (var _i = 0; _i < this.logStreams.length; _i++) {
+              this.logStreams[_i].initialize();
+            }
+          }
+        }, {
+          key: "logTime",
+          value: function logTime(pMessage, pDatum) {
+            var tmpMessage = typeof pMessage !== 'undefined' ? pMessage : 'Time';
+            var tmpTime = new Date();
+            this.info("".concat(tmpMessage, " ").concat(tmpTime, " (epoch ").concat(+tmpTime, ")"), pDatum);
+          }
 
-        // Log the delta between a timestamp, and now with a message
-        logTimeDelta(pTimeDelta, pMessage, pDatum) {
-          let tmpMessage = typeof pMessage !== 'undefined' ? pMessage : 'Time Measurement';
-          let tmpDatum = typeof pDatum === 'object' ? pDatum : {};
-          let tmpEndTime = +new Date();
-          this.info("".concat(tmpMessage, " logged at (epoch ").concat(+tmpEndTime, ") took (").concat(pTimeDelta, "ms)"), pDatum);
-        }
-        logTimeDeltaHuman(pTimeDelta, pMessage, pDatum) {
-          let tmpMessage = typeof pMessage !== 'undefined' ? pMessage : 'Time Measurement';
-          let tmpEndTime = +new Date();
-          let tmpMs = parseInt(pTimeDelta % 1000);
-          let tmpSeconds = parseInt(pTimeDelta / 1000 % 60);
-          let tmpMinutes = parseInt(pTimeDelta / (1000 * 60) % 60);
-          let tmpHours = parseInt(pTimeDelta / (1000 * 60 * 60));
-          tmpMs = tmpMs < 10 ? "00" + tmpMs : tmpMs < 100 ? "0" + tmpMs : tmpMs;
-          tmpSeconds = tmpSeconds < 10 ? "0" + tmpSeconds : tmpSeconds;
-          tmpMinutes = tmpMinutes < 10 ? "0" + tmpMinutes : tmpMinutes;
-          tmpHours = tmpHours < 10 ? "0" + tmpHours : tmpHours;
-          this.info("".concat(tmpMessage, " logged at (epoch ").concat(+tmpEndTime, ") took (").concat(pTimeDelta, "ms) or (").concat(tmpHours, ":").concat(tmpMinutes, ":").concat(tmpSeconds, ".").concat(tmpMs, ")"), pDatum);
-        }
-        logTimeDeltaRelative(pStartTime, pMessage, pDatum) {
-          this.logTimeDelta(this.getTimeDelta(pStartTime), pMessage, pDatum);
-        }
-        logTimeDeltaRelativeHuman(pStartTime, pMessage, pDatum) {
-          this.logTimeDeltaHuman(this.getTimeDelta(pStartTime), pMessage, pDatum);
-        }
-      }
+          // Get a timestamp
+        }, {
+          key: "getTimeStamp",
+          value: function getTimeStamp() {
+            return +new Date();
+          }
+        }, {
+          key: "getTimeDelta",
+          value: function getTimeDelta(pTimeStamp) {
+            var tmpEndTime = +new Date();
+            return tmpEndTime - pTimeStamp;
+          }
+
+          // Log the delta between a timestamp, and now with a message
+        }, {
+          key: "logTimeDelta",
+          value: function logTimeDelta(pTimeDelta, pMessage, pDatum) {
+            var tmpMessage = typeof pMessage !== 'undefined' ? pMessage : 'Time Measurement';
+            var tmpDatum = _typeof(pDatum) === 'object' ? pDatum : {};
+            var tmpEndTime = +new Date();
+            this.info("".concat(tmpMessage, " logged at (epoch ").concat(+tmpEndTime, ") took (").concat(pTimeDelta, "ms)"), pDatum);
+          }
+        }, {
+          key: "logTimeDeltaHuman",
+          value: function logTimeDeltaHuman(pTimeDelta, pMessage, pDatum) {
+            var tmpMessage = typeof pMessage !== 'undefined' ? pMessage : 'Time Measurement';
+            var tmpEndTime = +new Date();
+            var tmpMs = parseInt(pTimeDelta % 1000);
+            var tmpSeconds = parseInt(pTimeDelta / 1000 % 60);
+            var tmpMinutes = parseInt(pTimeDelta / (1000 * 60) % 60);
+            var tmpHours = parseInt(pTimeDelta / (1000 * 60 * 60));
+            tmpMs = tmpMs < 10 ? "00" + tmpMs : tmpMs < 100 ? "0" + tmpMs : tmpMs;
+            tmpSeconds = tmpSeconds < 10 ? "0" + tmpSeconds : tmpSeconds;
+            tmpMinutes = tmpMinutes < 10 ? "0" + tmpMinutes : tmpMinutes;
+            tmpHours = tmpHours < 10 ? "0" + tmpHours : tmpHours;
+            this.info("".concat(tmpMessage, " logged at (epoch ").concat(+tmpEndTime, ") took (").concat(pTimeDelta, "ms) or (").concat(tmpHours, ":").concat(tmpMinutes, ":").concat(tmpSeconds, ".").concat(tmpMs, ")"), pDatum);
+          }
+        }, {
+          key: "logTimeDeltaRelative",
+          value: function logTimeDeltaRelative(pStartTime, pMessage, pDatum) {
+            this.logTimeDelta(this.getTimeDelta(pStartTime), pMessage, pDatum);
+          }
+        }, {
+          key: "logTimeDeltaRelativeHuman",
+          value: function logTimeDeltaRelativeHuman(pStartTime, pMessage, pDatum) {
+            this.logTimeDeltaHuman(this.getTimeDelta(pStartTime), pMessage, pDatum);
+          }
+        }]);
+        return FableLog;
+      }(libFableServiceProviderBase);
       module.exports = FableLog;
       module.exports.LogProviderBase = require('./Fable-Log-BaseLogger.js');
       module.exports.LogProviderConsole = require('./Fable-Log-Logger-Console.js');

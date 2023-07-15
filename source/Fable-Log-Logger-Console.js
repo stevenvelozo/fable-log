@@ -9,7 +9,7 @@ class ConsoleLogger extends libBaseLogger
 		this._ShowTimeStamps = this._Settings.hasOwnProperty('showtimestamps') ? (this._Settings.showtimestamps == true) : true;
 		this._FormattedTimeStamps = this._Settings.hasOwnProperty('formattedtimestamps') ? (this._Settings.formattedtimestamps == true) : true;
 
-		this._ContextMessage = this._Settings.hasOwnProperty('Context') ? `(${this._Settings.Context})` : 
+		this._ContextMessage = this._Settings.hasOwnProperty('Context') ? `(${this._Settings.Context})` :
 								pFableLog._Settings.hasOwnProperty('Product') ? `(${pFableLog._Settings.Product})` :
 								'Unnamed_Log_Context';
 
