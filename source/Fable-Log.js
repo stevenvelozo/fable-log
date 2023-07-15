@@ -226,4 +226,4 @@ class FableLog extends libFableServiceProviderBase
 module.exports = FableLog;
 module.exports.LogProviderBase = require('./Fable-Log-BaseLogger.js');
 module.exports.LogProviderConsole = require('./Fable-Log-Logger-Console.js');
-module.exports.LogProviderConsole = require('./Fable-Log-Logger-SimpleFlatFile.js');
+module.exports.LogProviderFlatfile = require('./Fable-Log-Logger-SimpleFlatFile.js');
