@@ -19,7 +19,7 @@ const _Fable = new libFable(
 		"ProductVersion": "1.0.0",
 
 		"TestLogFileLocation": "./Fable-Log-Test.log"
-	})
+	});
 
 const libFableLog = require('../source/Fable-Log.js');
 

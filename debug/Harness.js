@@ -1,13 +1,13 @@
 let libFableLog = require('../source/Fable-Log.js');
 
-let tmpLog = new libFableLog.FableLog(
+let tmpLog = new libFableLog(
 	{
 		LogStreams:
 		[
 			{
 				//loggertype:'console',
 				loggertype:'simpleflatfile',
-				outputloglinestoconsole: false,
+				outputloglinestoconsole: true,
 				showtimestamps: true,
 				formattedtimestamps: true,
 				level:'trace',
