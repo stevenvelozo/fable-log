@@ -6,16 +6,16 @@ class ConsoleLogger extends libBaseLogger
 	{
 		super(pLogStreamSettings);
 
-		this._ShowTimeStamps = this._Settings.hasOwnProperty('showtimestamps') ? (this._Settings.showtimestamps == true) : true;
-		this._FormattedTimeStamps = this._Settings.hasOwnProperty('formattedtimestamps') ? (this._Settings.formattedtimestamps == true) : true;
+		this._ShowTimeStamps = ('showtimestamps' in this._Settings) ? (this._Settings.showtimestamps == true) : true;
+		this._FormattedTimeStamps = ('formattedtimestamps' in this._Settings) ? (this._Settings.formattedtimestamps == true) : true;
 
-		this._ContextMessage = this._Settings.hasOwnProperty('Context') ? `(${this._Settings.Context})` :
-								pFableLog._Settings.hasOwnProperty('Product') ? `(${pFableLog._Settings.Product})` :
+		this._ContextMessage = ('Context' in this._Settings) ? `(${this._Settings.Context})` :
+								('Product' in pFableLog._Settings) ? `(${pFableLog._Settings.Product})` :
 								'Unnamed_Log_Context';
 
 		// Allow the user to decide what gets output to the console
-		this._OutputLogLinesToConsole = this._Settings.hasOwnProperty('outputloglinestoconsole') ? this._Settings.outputloglinestoconsole : true;
-		this._OutputObjectsToConsole = this._Settings.hasOwnProperty('outputobjectstoconsole') ? this._Settings.outputobjectstoconsole : true;
+		this._OutputLogLinesToConsole = ('outputloglinestoconsole' in this._Settings) ? this._Settings.outputloglinestoconsole : true;
+		this._OutputObjectsToConsole = ('outputobjectstoconsole' in this._Settings) ? this._Settings.outputobjectstoconsole : true;
 
 		// Precompute the prefix for each level
 		this.prefixCache = {};

@@ -17,7 +17,7 @@ class FableLog extends libFableServiceProviderBase
 
 		this._Providers = require('./Fable-Log-DefaultProviders-Node.js');
 
-		this._StreamDefinitions = (tmpSettings.hasOwnProperty('LogStreams')) ? tmpSettings.LogStreams : require('./Fable-Log-DefaultStreams.json');
+		this._StreamDefinitions = (('LogStreams' in tmpSettings)) ? tmpSettings.LogStreams : require('./Fable-Log-DefaultStreams.json');
 
 		this.logStreams = [];
 
@@ -43,7 +43,7 @@ class FableLog extends libFableServiceProviderBase
 	addLogger(pLogger, pLevel)
 	{
 		// Bail out if we've already created one.
-		if (this.activeLogStreams.hasOwnProperty(pLogger.loggerUUID))
+		if (pLogger.loggerUUID in this.activeLogStreams)
 		{
 			return false;
 		}
@@ -146,7 +146,7 @@ class FableLog extends libFableServiceProviderBase
 		{
 			let tmpStreamDefinition = Object.assign({loggertype:'default',streamtype:'console',level:'info'},this._StreamDefinitions[i]);
 
-			if (!this._Providers.hasOwnProperty(tmpStreamDefinition.loggertype))
+			if (!(tmpStreamDefinition.loggertype in this._Providers))
 			{
 				console.log(`Error initializing log stream: bad loggertype in stream definition ${JSON.stringify(tmpStreamDefinition)}`);
 			}

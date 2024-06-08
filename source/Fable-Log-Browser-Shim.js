@@ -5,7 +5,7 @@
 */
 var libNPMModuleWrapper = require('./Fable-Log.js');
 
-if ((typeof(window) === 'object') && !window.hasOwnProperty('FableLog'))
+if ((typeof(window) === 'object') && !('FableLog' in window))
 {
 	window.FableLog = libNPMModuleWrapper;
 }
