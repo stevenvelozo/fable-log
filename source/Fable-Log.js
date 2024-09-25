@@ -4,6 +4,8 @@
 
 const libFableServiceProviderBase = require('fable-serviceproviderbase').CoreServiceProviderBase;
 
+const libPackage = require('../package.json');
+
 class FableLog extends libFableServiceProviderBase
 {
 	constructor(pSettings, pServiceHash)
@@ -11,8 +13,8 @@ class FableLog extends libFableServiceProviderBase
 		super(pSettings, pServiceHash);
 
 		this.serviceType = 'Logging';
-
-		this._Package = require('../package.json');
+		/** @type {Object} */
+		this._Package = libPackage;
 
 		let tmpSettings = (typeof(pSettings) === 'object') ? pSettings : {}
 		this._Settings = tmpSettings;

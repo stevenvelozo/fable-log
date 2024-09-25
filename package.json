@@ -1,18 +1,13 @@
 {
     "name": "fable-log",
-    "version": "3.0.15",
+    "version": "3.0.16",
     "description": "A simple logging wrapper.",
     "main": "source/Fable-Log.js",
     "scripts": {
         "start": "node source/Fable-Log.js",
         "coverage": "./node_modules/.bin/nyc --reporter=lcov --reporter=text-lcov ./node_modules/mocha/bin/_mocha -- -u tdd -R spec",
         "test": "./node_modules/.bin/mocha -u tdd -R spec",
-        "build": "./node_modules/.bin/gulp build",
-        "docker-dev-build-image": "docker build ./ -f Dockerfile_LUXURYCode -t retold/fable-log:local",
-        "docker-dev-run": "docker run -it -d --name retold-fable-log-dev -p 30004:8080 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/fable-log\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" retold/fable-log:local",
-        "tests": "npx mocha -u tdd --exit -R spec --grep",
-        "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t fable-log-image:local",
-        "docker-dev-shell": "docker exec -it fable-log-dev /bin/bash"
+        "tests": "npx mocha -u tdd --exit -R spec --grep"
     },
     "mocha": {
         "diff": true,
@@ -52,6 +47,6 @@
         "quackage": "^1.0.33"
     },
     "dependencies": {
-        "fable-serviceproviderbase": "^3.0.14"
+        "fable-serviceproviderbase": "^3.0.15"
     }
 }
