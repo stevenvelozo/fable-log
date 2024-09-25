@@ -12,6 +12,8 @@ class FableLog extends libFableServiceProviderBase
 
 		this.serviceType = 'Logging';
 
+		this._Package = require('../package.json');
+
 		let tmpSettings = (typeof(pSettings) === 'object') ? pSettings : {}
 		this._Settings = tmpSettings;
 

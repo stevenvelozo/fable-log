@@ -1,6 +1,6 @@
 {
     "name": "fable-log",
-    "version": "3.0.14",
+    "version": "3.0.15",
     "description": "A simple logging wrapper.",
     "main": "source/Fable-Log.js",
     "scripts": {
@@ -49,9 +49,9 @@
     },
     "homepage": "https://github.com/stevenvelozo/fable-log",
     "devDependencies": {
-        "quackage": "^1.0.22"
+        "quackage": "^1.0.33"
     },
     "dependencies": {
-        "fable-serviceproviderbase": "^3.0.12"
+        "fable-serviceproviderbase": "^3.0.14"
     }
 }

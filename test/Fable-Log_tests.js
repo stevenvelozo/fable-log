@@ -37,6 +37,10 @@ suite
 						let tmpFableLog = new libFableLog();
 						Expect(tmpFableLog)
 							.to.be.an('object', 'Fable-Log should initialize as an object directly from the require statement.');
+						Expect(tmpFableLog._PackageFableServiceProvider).to.be.an('object', 'Fable-Log should have a _PackageFableServiceProvider object.');
+						Expect(tmpFableLog._PackageFableServiceProvider.name).equal('fable-serviceproviderbase', 'Fable-Log _PackageFableServiceProvider.package.name should be set.');
+						Expect(tmpFableLog._Package).to.be.an('object', 'Fable-Log should have a _Package object.');
+						Expect(tmpFableLog._Package.name).to.equal('fable-log', 'Fable-Log _Package.package.name should be set.');
 					}
 				);
 				test
