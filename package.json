@@ -5,8 +5,8 @@
     "main": "source/Fable-Log.js",
     "scripts": {
         "start": "node source/Fable-Log.js",
-        "coverage": "./node_modules/.bin/nyc --reporter=lcov --reporter=text-lcov ./node_modules/mocha/bin/_mocha -- -u tdd -R spec",
-        "test": "./node_modules/.bin/mocha -u tdd -R spec",
+        "coverage": "npx quack coverage",
+        "test": "npx mocha -u tdd --exit -R spec",
         "tests": "npx mocha -u tdd --exit -R spec --grep"
     },
     "mocha": {
