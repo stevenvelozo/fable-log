@@ -47,6 +47,7 @@
         "quackage": "^1.0.59"
     },
     "dependencies": {
-        "fable-serviceproviderbase": "^3.0.19"
+        "fable-serviceproviderbase": "^3.0.19",
+        "pict-section-content": "^0.0.11"
     }
 }

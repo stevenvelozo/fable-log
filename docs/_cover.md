@@ -1,4 +1,4 @@
-# Fable-Log <small>3</small>
+# Fable-Log
 
 > A flexible, extensible logging framework for Node.js and browser applications
 
