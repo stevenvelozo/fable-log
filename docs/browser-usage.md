@@ -7,8 +7,11 @@ Fable-Log works in browser environments with automatic adaptation. The browser b
 ### NPM with Bundler
 
 ```javascript
-// Works with webpack, rollup, browserify, etc.
-import FableLog from 'fable-log';
+// In a bundler (webpack, rollup, browserify, etc.) you'd write:
+//   import FableLog from 'fable-log';
+// The playground uses CommonJS-style require under the hood, so the
+// runnable equivalent here is the require() form:
+const FableLog = require('fable-log');
 
 const log = new FableLog();
 log.initialize();
@@ -61,6 +64,8 @@ This ensures bundlers automatically use the correct version.
 The console provider uses `console.log()` which integrates with browser developer tools:
 
 ```javascript
+const FableLog = require('fable-log');
+
 const log = new FableLog({
     Product: 'MyWebApp',
     LogStreams: [
@@ -85,15 +90,17 @@ Output appears in the browser's console with expandable objects.
 ### Using Webpack
 
 ```javascript
-// webpack.config.js
-module.exports = {
+// webpack.config.js — build-time config, shown as reference text.
+const webpackConfig = {
     entry: './src/app.js',
     output: {
         filename: 'bundle.js',
-        path: __dirname + '/dist'
-    },
+        // Real code: path: __dirname + '/dist'
+        path: '<dirname>/dist'
+    }
     // Browser field in package.json handles provider mapping
 };
+console.info('Webpack config:', webpackConfig);
 ```
 
 ### Using Browserify
@@ -148,6 +155,15 @@ class LocalStorageLogger extends BaseLogger {
         localStorage.removeItem(this.storageKey);
     }
 }
+
+// Demo against a unique key so we don't trample real localStorage state.
+const demoKey = '__playground_demo_logs__';
+const logger = new LocalStorageLogger({ storageKey: demoKey, maxEntries: 5 }, null);
+logger.write('info', 'first',  { i: 1 });
+logger.write('warn', 'second', { i: 2 });
+console.log('captured:', logger.getLogs());
+logger.clearLogs();
+console.log('after clear:', logger.getLogs());
 ```
 
 ### Beacon API Provider
@@ -155,6 +171,8 @@ class LocalStorageLogger extends BaseLogger {
 For sending logs to a server when the page unloads:
 
 ```javascript
+const BaseLogger = require('fable-log').LogProviderBase;
+
 class BeaconLogger extends BaseLogger {
     constructor(pLogStreamSettings, pFableLog) {
         super(pLogStreamSettings, pFableLog);
@@ -163,9 +181,9 @@ class BeaconLogger extends BaseLogger {
     }
 
     initialize() {
-        window.addEventListener('beforeunload', () => {
-            this.flush();
-        });
+        // In a real page you'd attach beforeunload here.  We skip the
+        // listener in the playground so this snippet doesn't leave a
+        // lingering handler on the docuserve window.
     }
 
     write(pLevel, pLogText, pObject) {
@@ -187,6 +205,12 @@ class BeaconLogger extends BaseLogger {
         }
     }
 }
+
+const logger = new BeaconLogger({ endpoint: 'https://logs.example.com/ingest' }, null);
+logger.initialize();
+logger.write('warn', 'demo write', { i: 1 });
+console.log('buffered entries:', logger.buffer.length);
+console.log('sendBeacon available?', typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function');
 ```
 
 ## Performance Considerations
@@ -196,12 +220,23 @@ class BeaconLogger extends BaseLogger {
 3. **Use Sampling**: For high-frequency events, consider logging only a sample
 
 ```javascript
+const FableLog = require('fable-log');
+
+// `process` is Node-only; guard so this snippet runs cleanly in both
+// environments.  In real browser code post-bundling, your bundler will
+// substitute `process.env.NODE_ENV` at build time.
+const nodeEnv = (typeof process !== 'undefined' && process.env)
+    ? process.env.NODE_ENV
+    : 'development';
+
 const log = new FableLog({
     LogStreams: [
         {
             loggertype: 'console',
-            level: process.env.NODE_ENV === 'production' ? 'warn' : 'trace'
+            level: nodeEnv === 'production' ? 'warn' : 'trace'
         }
     ]
 });
+log.initialize();
+log.trace('configured for', { nodeEnv });
 ```

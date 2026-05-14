@@ -34,14 +34,25 @@ class MyCustomProvider extends BaseLogger {
     }
 }
 
-module.exports = MyCustomProvider;
+// In real code: module.exports = MyCustomProvider;
+// In the playground we just show the class is defined and instantiable.
+const inst = new MyCustomProvider({ myOption: 'demo' }, null);
+console.log('MyCustomProvider defined; myOption =', inst.myOption);
 ```
 
 ### Registering the Provider
 
 ```javascript
 const FableLog = require('fable-log');
-const MyCustomProvider = require('./my-custom-provider');
+const BaseLogger = FableLog.LogProviderBase;
+
+// In real code: const MyCustomProvider = require('./my-custom-provider');
+// In the playground we inline a tiny version so the snippet runs.
+class MyCustomProvider extends BaseLogger {
+    constructor(s, f) { super(s, f); this.myOption = s.myOption; this.records = []; }
+    initialize() {}
+    write(pLevel, pLogText, pObject) { this.records.push({ pLevel, pLogText, pObject }); return true; }
+}
 
 const log = new FableLog({
     LogStreams: [
@@ -57,6 +68,8 @@ const log = new FableLog({
 log._Providers.mycustom = MyCustomProvider;
 
 log.initialize();
+log.info('hello, custom provider');
+console.log('custom provider captured:', log.logStreams[0] && log.logStreams[0].records);
 ```
 
 ## Example: HTTP Log Provider
@@ -80,10 +93,8 @@ class HttpLogger extends BaseLogger {
     }
 
     initialize() {
-        // Start periodic flush
-        this.flushTimer = setInterval(() => {
-            this.flush();
-        }, this.flushInterval);
+        // Start periodic flush (skipped in the playground demo so we
+        // don't leave a long-lived timer in the page after Run).
     }
 
     write(pLevel, pLogText, pObject) {
@@ -106,24 +117,10 @@ class HttpLogger extends BaseLogger {
 
     async flush() {
         if (this.buffer.length === 0) return;
-
-        const entries = this.buffer;
+        // In real code: `await fetch(this.endpoint, {...})`.
+        // For the playground demo we just drop the batch into the log.
+        console.log('HttpLogger.flush ->', this.buffer.length, 'entries to', this.endpoint);
         this.buffer = [];
-
-        try {
-            await fetch(this.endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...this.headers
-                },
-                body: JSON.stringify({ logs: entries })
-            });
-        } catch (err) {
-            // Re-add to buffer on failure
-            this.buffer = [...entries, ...this.buffer];
-            console.error('Failed to send logs:', err);
-        }
     }
 
     destroy() {
@@ -134,12 +131,27 @@ class HttpLogger extends BaseLogger {
     }
 }
 
-module.exports = HttpLogger;
+// In real code: module.exports = HttpLogger;
+const demoLogger = new HttpLogger({ endpoint: 'https://logs.example.com', batchSize: 2 }, null);
+demoLogger.initialize();
+demoLogger.write('info', 'first',  { i: 1 });
+demoLogger.write('info', 'second', { i: 2 }); // hits batchSize → flush
+console.log('after demo writes, buffer size:', demoLogger.buffer.length);
 ```
 
 Usage:
 
 ```javascript
+const FableLog = require('fable-log');
+const BaseLogger = FableLog.LogProviderBase;
+
+// Tiny inline HttpLogger so the registration snippet works on its own.
+class HttpLogger extends BaseLogger {
+    constructor(s, f) { super(s, f); this.endpoint = s.endpoint; this.sent = []; }
+    initialize() {}
+    write(level, message, datum) { this.sent.push({ level, message, datum }); return true; }
+}
+
 const log = new FableLog({
     LogStreams: [
         {
@@ -155,13 +167,25 @@ const log = new FableLog({
 
 log._Providers.http = HttpLogger;
 log.initialize();
+log.warn('this would POST to the endpoint');
+console.log('captured by http stream:', log.logStreams[0].sent);
 ```
 
 ## Example: MongoDB Provider
 
 ```javascript
+// Reference snippet — `require('mongodb')` isn't available in the
+// playground (it's a Node-native driver).  We sketch the shape of the
+// class so the doc renders, with a fake MongoClient that records what
+// would have been written.
 const BaseLogger = require('fable-log').LogProviderBase;
-const { MongoClient } = require('mongodb');
+
+class FakeMongoClient {
+    constructor(uri) { this.uri = uri; this.docs = []; }
+    async connect() {}
+    db() { return { collection: (name) => ({ insertOne: async (doc) => { this.docs.push({ name, doc }); } }) }; }
+    async close() {}
+}
 
 class MongoLogger extends BaseLogger {
     constructor(pLogStreamSettings, pFableLog) {
@@ -176,7 +200,8 @@ class MongoLogger extends BaseLogger {
     }
 
     async initialize() {
-        this.client = new MongoClient(this.connectionString);
+        // Real code: this.client = new MongoClient(this.connectionString);
+        this.client = new FakeMongoClient(this.connectionString);
         await this.client.connect();
         this.db = this.client.db(this.database);
     }
@@ -205,7 +230,12 @@ class MongoLogger extends BaseLogger {
     }
 }
 
-module.exports = MongoLogger;
+// Demo: instantiate, init, write one record, verify it landed in the fake.
+const logger = new MongoLogger({ connectionString: 'mongodb://demo' }, null);
+await logger.initialize();
+logger.write('info', 'hello mongo', { user: 1 });
+await new Promise(r => setTimeout(r, 5));
+console.log('docs in fake collection:', logger.client.docs.length);
 ```
 
 ## Extending Built-in Providers
@@ -238,7 +268,9 @@ class ColoredConsoleLogger extends ConsoleLogger {
     }
 }
 
-module.exports = ColoredConsoleLogger;
+// In real code: module.exports = ColoredConsoleLogger;
+// In the playground we just verify the class is defined.
+console.log('ColoredConsoleLogger:', typeof ColoredConsoleLogger);
 ```
 
 ## Best Practices

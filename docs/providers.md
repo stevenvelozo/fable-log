@@ -10,15 +10,15 @@ The console provider outputs logs to the standard console using `console.log()`.
 
 #### Configuration
 
-```javascript
+```json
 {
-    loggertype: 'console',
-    level: 'trace',
-    showtimestamps: true,          // Show timestamps (default: true)
-    formattedtimestamps: true,     // Use ISO format (default: true)
-    outputloglinestoconsole: true, // Output log lines (default: true)
-    outputobjectstoconsole: true,  // Output data objects (default: true)
-    Context: 'MyContext'           // Custom context label
+    "loggertype": "console",
+    "level": "trace",
+    "showtimestamps": true,
+    "formattedtimestamps": true,
+    "outputloglinestoconsole": true,
+    "outputobjectstoconsole": true,
+    "Context": "MyContext"
 }
 ```
 
@@ -48,17 +48,17 @@ The simple flat file provider writes logs to a file on disk. It uses a buffered 
 
 #### Configuration
 
-```javascript
+```json
 {
-    loggertype: 'simpleflatfile',
-    level: 'info',
-    path: './logs/application.log',
-    showtimestamps: true,
-    formattedtimestamps: true,
-    outputloglinestoconsole: false,  // Don't also output to console
-    fileStreamOptions: {
-        flags: 'a',                   // Append mode
-        encoding: 'utf8'
+    "loggertype": "simpleflatfile",
+    "level": "info",
+    "path": "./logs/application.log",
+    "showtimestamps": true,
+    "formattedtimestamps": true,
+    "outputloglinestoconsole": false,
+    "fileStreamOptions": {
+        "flags": "a",
+        "encoding": "utf8"
     }
 }
 ```
@@ -76,29 +76,29 @@ The simple flat file provider writes logs to a file on disk. It uses a buffered 
 The file provider exposes additional methods for file management:
 
 ```javascript
-// Get reference to file stream
-const fileStream = log.logStreams[0];
-
-// Manually flush buffer to file
-fileStream.flushBufferToLogFile(callback);
-
-// Close the file writer
-fileStream.closeWriter(callback);
+// Reference snippet — `simpleflatfile` is Node-only and isn't available
+// in the browser playground.  Shown here as the shape of the methods.
+console.info("In Node.js with a simpleflatfile stream:");
+console.info("  const fileStream = log.logStreams[0];");
+console.info("  fileStream.flushBufferToLogFile(callback);");
+console.info("  fileStream.closeWriter(callback);");
 ```
 
 #### Example: Graceful Shutdown
 
 ```javascript
-process.on('SIGTERM', () => {
-    // Find file loggers and close them
-    log.logStreams.forEach(stream => {
-        if (stream.closeWriter) {
-            stream.closeWriter(() => {
-                console.log('Log file closed');
-            });
-        }
-    });
-});
+// Reference snippet — `process.on('SIGTERM', ...)` is Node-only.  In the
+// browser playground we just show what the shutdown handler would look
+// like; in a real Node service the callback fires when the process
+// receives SIGTERM.
+console.info("In Node.js:");
+console.info("  process.on('SIGTERM', () => {");
+console.info("      log.logStreams.forEach(stream => {");
+console.info("          if (stream.closeWriter) {");
+console.info("              stream.closeWriter(() => console.log('Log file closed'));");
+console.info("          }");
+console.info("      });");
+console.info("  });");
 ```
 
 ## Provider Availability
@@ -117,8 +117,14 @@ Providers can be accessed directly from the module:
 ```javascript
 const FableLog = require('fable-log');
 
-// Provider classes
-const BaseLogger = FableLog.LogProviderBase;
-const ConsoleLogger = FableLog.LogProviderConsole;
-const FlatFileLogger = FableLog.LogProviderFlatfile;
+// Provider classes — these are static properties on the FableLog
+// constructor.  In the browser bundle the file logger isn't exported
+// (file IO is Node-only), so guard accordingly.
+const BaseLogger     = FableLog.LogProviderBase;
+const ConsoleLogger  = FableLog.LogProviderConsole;
+const FlatFileLogger = FableLog.LogProviderFlatfile; // undefined in browser builds
+
+console.log('BaseLogger:',     typeof BaseLogger);
+console.log('ConsoleLogger:',  typeof ConsoleLogger);
+console.log('FlatFileLogger:', typeof FlatFileLogger);
 ```

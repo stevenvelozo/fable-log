@@ -20,3 +20,5 @@
 
   - [Browser Usage](browser-usage.md)
   - [Advanced Usage](advanced-usage.md)
+
+- [Code Playground](playground.md)

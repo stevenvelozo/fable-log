@@ -44,11 +44,11 @@
     },
     "homepage": "https://github.com/stevenvelozo/fable-log",
     "devDependencies": {
-        "pict-docuserve": "^1.0.1",
+        "pict-docuserve": "^1.2.0",
         "quackage": "^1.2.3"
     },
     "dependencies": {
         "fable-serviceproviderbase": "^3.0.19",
-        "pict-section-content": "^1.0.1"
+        "pict-section-content": "^1.0.2"
     }
 }

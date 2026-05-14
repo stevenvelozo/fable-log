@@ -5,6 +5,8 @@ Fable-Log is configured via a settings object passed to the constructor. All set
 ## Configuration Object
 
 ```javascript
+const FableLog = require('fable-log');
+
 const settings = {
     Product: 'MyApplication',      // Application name for log context
     ProductVersion: '1.0.0',       // Application version
@@ -13,11 +15,13 @@ const settings = {
         Worker: 1                  // Worker identifier
     },
     LogStreams: [                  // Array of stream definitions
-        // ... stream configurations
+        { loggertype: 'console', level: 'info' }
     ]
 };
 
 const log = new FableLog(settings);
+log.initialize();
+log.info('Configured logger ready', { Product: settings.Product });
 ```
 
 ## Settings Reference
@@ -35,11 +39,11 @@ The `LogStreams` array defines where and how logs are output. Each stream is an 
 
 ### Stream Definition
 
-```javascript
+```json
 {
-    loggertype: 'console',      // Provider type
-    streamtype: 'console',      // Stream subtype (provider-specific)
-    level: 'info'               // Minimum log level for this stream
+    "loggertype": "console",
+    "streamtype": "console",
+    "level": "info"
 }
 ```
 
@@ -70,13 +74,13 @@ Setting a stream's level includes all levels at or above that severity. For exam
 
 Without any configuration, fable-log uses:
 
-```javascript
+```json
 {
-    LogStreams: [
+    "LogStreams": [
         {
-            loggertype: 'console',
-            streamtype: 'console',
-            level: 'trace'
+            "loggertype": "console",
+            "streamtype": "console",
+            "level": "trace"
         }
     ]
 }
@@ -87,6 +91,8 @@ Without any configuration, fable-log uses:
 ### Development Environment
 
 ```javascript
+const FableLog = require('fable-log');
+
 const log = new FableLog({
     Product: 'MyApp',
     LogStreams: [
@@ -98,11 +104,18 @@ const log = new FableLog({
         }
     ]
 });
+log.initialize();
+log.trace('dev logger ready — trace level');
 ```
 
 ### Production Environment
 
 ```javascript
+const FableLog = require('fable-log');
+
+// In the browser playground only the `console` stream initializes;
+// the `simpleflatfile` entries are silently ignored.  In Node, all
+// three streams come online.
 const log = new FableLog({
     Product: 'MyApp',
     ProductVersion: '2.1.0',
@@ -123,11 +136,15 @@ const log = new FableLog({
         }
     ]
 });
+log.initialize();
+log.warn('production logger online');
 ```
 
 ### Quiet Mode (Errors Only)
 
 ```javascript
+const FableLog = require('fable-log');
+
 const log = new FableLog({
     LogStreams: [
         {
@@ -136,4 +153,7 @@ const log = new FableLog({
         }
     ]
 });
+log.initialize();
+log.info('info — suppressed at error level');
+log.error('error — passes the filter');
 ```

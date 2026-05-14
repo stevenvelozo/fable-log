@@ -32,6 +32,10 @@ log.fatal('Fatal error');
 You can pass an optional data object as the second parameter to any logging method:
 
 ```javascript
+const FableLog = require('fable-log');
+const log = new FableLog();
+log.initialize();
+
 log.info('User logged in', {
     userId: 12345,
     username: 'john_doe',
@@ -50,6 +54,8 @@ log.error('Database connection failed', {
 Pass a settings object to customize behavior:
 
 ```javascript
+const FableLog = require('fable-log');
+
 const log = new FableLog({
     Product: 'MyApplication',
     ProductVersion: '1.0.0',
@@ -64,6 +70,7 @@ const log = new FableLog({
 });
 
 log.initialize();
+log.info('Configured logger ready');
 ```
 
 ## Multiple Log Streams
@@ -71,6 +78,11 @@ log.initialize();
 Route logs to multiple destinations simultaneously:
 
 ```javascript
+const FableLog = require('fable-log');
+
+// Note: the `simpleflatfile` provider is Node.js-only; in the browser
+// playground it's gracefully ignored, so only the console stream lights
+// up here.  Run the same config under Node and both streams initialize.
 const log = new FableLog({
     Product: 'MyApplication',
     LogStreams: [
